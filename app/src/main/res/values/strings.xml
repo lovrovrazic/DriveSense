@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">driveSense</string>
+    <string name="get_score_button">Get eco-score</string>
+    <string name="tips_button">Eco-driving tips</string>
+    <string name="tips_activity">Eco-driving tips</string>
+    <string name="getscore_activity">Eco-score</string>
+    <string name="gauge_image">Gauge</string>
+    <string name="needle_image">Needle</string>
+    <string name="gauge_value">00</string>
+    <string name="start_button">Start</string>
+    <string name="tips_text">
+        <![CDATA[
+        <h2>What is eco-driving?</h2><br>
+        Eco-driving is a method of driving a vehicle with the goal of using less fuel and having less of an impact on the environment.
+        <br><br>
+        <h2>What can be achieved by eco-driving?</h2><br>
+        Benefits of eco-driving as cited by the U.S. Forest Service:
+        <br>• Lower fuel use and costs
+        <br>• Reduce emissions, including CO2
+        <br>• Reduce vehicle wear
+        <br>• Increase safety
+        <br><br>
+        <h2>Eco-driving techniques</h2>
+        <br>• Don’t slam on the brakes
+        <br>• Regulate your speed
+        <br>• Reduce excess weight
+        <br>• Optimize routing
+        <br>• Avoid idling
+        ]]>
+    </string>
+</resources>
