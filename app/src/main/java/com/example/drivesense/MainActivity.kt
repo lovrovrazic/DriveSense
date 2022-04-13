@@ -21,5 +21,11 @@ class MainActivity : AppCompatActivity() {
             val Intent = Intent(this, TipsActivity::class.java)
             startActivity(Intent)
         }
+
+        val sensorsBtn = findViewById<Button>(R.id.sensors_button)
+        sensorsBtn.setOnClickListener{
+            val Intent = Intent(this, SensorsActivity::class.java)
+            startActivity(Intent)
+        }
     }
 }

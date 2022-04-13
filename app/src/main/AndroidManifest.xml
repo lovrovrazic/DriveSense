@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DriveSense">
         <activity
+            android:name=".SensorsActivity"
+            android:exported="false" />
+        <activity
             android:name=".DrivingActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
@@ -26,6 +29,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.aware.utils.Aware_Accounts"
+            android:exported="true"/>
     </application>
 
 </manifest>
