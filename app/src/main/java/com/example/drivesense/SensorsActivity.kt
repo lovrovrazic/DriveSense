@@ -1,16 +1,21 @@
 package com.example.drivesense
 
-import androidx.appcompat.app.AppCompatActivity
+import android.R.attr.data
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.aware.LinearAccelerometer
+import androidx.appcompat.app.AppCompatActivity
+import androidx.collection.CircularArray
 import com.aware.Aware
 import com.aware.Aware_Preferences
+import com.aware.LinearAccelerometer
 import com.aware.providers.Linear_Accelerometer_Provider
 import com.example.drivesense.databinding.ActivitySensorsBinding
-import androidx.collection.CircularArray
+import com.example.drivesense.ml.Behaviour
+import org.tensorflow.lite.DataType
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import java.nio.ByteBuffer
 import kotlin.math.pow
 
 
@@ -39,23 +44,48 @@ class SensorsActivity : AppCompatActivity() {
     }
 
     fun model_classification(){
+//      var data = ArrayList<Array<Array<Float>>>()
+//      for (i in 0..29) {
+//          data.add(arrayOf( arrayOf(x_buffer.get(i).toFloat()),arrayOf(y_buffer.get(i).toFloat()) ,arrayOf(z_buffer.get(i).toFloat())))
+//      }
 
-        Log.d("threshold reached", "")
+        var data = FloatArray(90)
+        for (i in 0..89 step 3) {
+            data[i] = x_buffer.get(i % 30).toFloat()
+            data[i + 1] = y_buffer.get(i % 30).toFloat()
+            data[i + 2] = z_buffer.get(i % 30).toFloat()
+        }
+
+        var model = Behaviour.newInstance(this)
+
+        val inputFeature0 = TensorBuffer.createFixedSize( intArrayOf(1,30,3,1), DataType.FLOAT32 )
+
+        inputFeature0.loadArray(data)
+
+        // Runs model inference and gets result.
+        val outputs = model.process(inputFeature0)
+        val outputFeature0 = outputs.outputFeature0AsTensorBuffer.floatArray
+
+        Log.d("rezultat", outputFeature0.toString())
+        model.close()
         t = true
     }
 
     fun updateText() {
         var x = (x_list.sum()/x_list.size) / g
+        if(x_buffer.size() >= 30) x_buffer.popFirst()
         x_buffer.addLast(x)
         binding.tvAccXValue.text = "%.4f".format(x)
         x_list.clear()
 
         var y = (y_list.sum()/y_list.size) / g
+        if(y_buffer.size() >= 30) y_buffer.popFirst()
         y_buffer.addLast(y)
         binding.tvAccYValue.text = "%.4f".format(y)
         y_list.clear()
 
         var z = (z_list.sum()/z_list.size) / g
+        if(z_buffer.size() >= 30) z_buffer.popFirst()
         z_buffer.addLast(z)
         binding.tvAccZValue.text = "%.4f".format(z)
         z_list.clear()
@@ -68,6 +98,7 @@ class SensorsActivity : AppCompatActivity() {
                 model_classification()
             }, 2000)
         }
+        Log.d(x.toString(), "")
 
 
     }
@@ -93,7 +124,7 @@ class SensorsActivity : AppCompatActivity() {
         LinearAccelerometer.setSensorObserver { data ->
             try {
                 runOnUiThread {
-                    Log.d("ACC DATA:", data.toString())
+                    //Log.d("ACC DATA:", data.toString())
 
 //                    val x = data.getAsDouble(Linear_Accelerometer_Provider.Linear_Accelerometer_Data.VALUES_0).toString()
 //                    val y = data.getAsDouble(Linear_Accelerometer_Provider.Linear_Accelerometer_Data.VALUES_1).toString()
