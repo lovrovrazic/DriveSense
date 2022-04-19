@@ -10,8 +10,13 @@ import com.aware.Aware
 import com.aware.Aware_Preferences
 import com.aware.providers.Linear_Accelerometer_Provider
 import com.example.drivesense.databinding.ActivitySensorsBinding
+import androidx.collection.CircularArray
+import kotlin.math.pow
+
 
 private lateinit var binding: ActivitySensorsBinding
+
+const val g = 9.80665
 
 class SensorsActivity : AppCompatActivity() {
 
@@ -19,7 +24,12 @@ class SensorsActivity : AppCompatActivity() {
     var y_list = mutableListOf<Double>()
     var z_list = mutableListOf<Double>()
 
+    val x_buffer = CircularArray<Double>(30)
+    val y_buffer = CircularArray<Double>(30)
+    val z_buffer = CircularArray<Double>(30)
+
     lateinit var mainHandler: Handler
+    var t = true
 
     private val updateTextTask = object : Runnable {
         override fun run() {
@@ -28,13 +38,38 @@ class SensorsActivity : AppCompatActivity() {
         }
     }
 
+    fun model_classification(){
+
+        Log.d("threshold reached", "")
+        t = true
+    }
+
     fun updateText() {
-        binding.tvAccXValue.text = "%.4f".format((x_list.sum()/x_list.size))
+        var x = (x_list.sum()/x_list.size) / g
+        x_buffer.addLast(x)
+        binding.tvAccXValue.text = "%.4f".format(x)
         x_list.clear()
-        binding.tvAccYValue.text = "%.4f".format((y_list.sum()/y_list.size))
+
+        var y = (y_list.sum()/y_list.size) / g
+        y_buffer.addLast(y)
+        binding.tvAccYValue.text = "%.4f".format(y)
         y_list.clear()
-        binding.tvAccZValue.text = "%.4f".format((z_list.sum()/z_list.size))
+
+        var z = (z_list.sum()/z_list.size) / g
+        z_buffer.addLast(z)
+        binding.tvAccZValue.text = "%.4f".format(z)
         z_list.clear()
+
+        var yz_mag = Math.sqrt(y.pow(2) + z.pow(2))
+
+        if (yz_mag > 0.1 && t) {
+            t = false
+            Handler().postDelayed({
+                model_classification()
+            }, 2000)
+        }
+
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
