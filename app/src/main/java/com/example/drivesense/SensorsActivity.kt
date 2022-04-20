@@ -1,10 +1,10 @@
 package com.example.drivesense
 
-import android.R.attr.data
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.CircularArray
 import com.aware.Aware
@@ -15,7 +15,6 @@ import com.example.drivesense.databinding.ActivitySensorsBinding
 import com.example.drivesense.ml.Behaviour
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
-import java.nio.ByteBuffer
 import kotlin.math.pow
 
 
@@ -66,7 +65,8 @@ class SensorsActivity : AppCompatActivity() {
         val outputs = model.process(inputFeature0)
         val outputFeature0 = outputs.outputFeature0AsTensorBuffer.floatArray
 
-        Log.d("rezultat", outputFeature0.toString())
+        Log.d("rezultat", "%.2f %.2f %.2f %.2f".format(outputFeature0[0],outputFeature0[1],outputFeature0[2],outputFeature0[3]))
+
         model.close()
         t = true
     }
@@ -98,13 +98,14 @@ class SensorsActivity : AppCompatActivity() {
                 model_classification()
             }, 2000)
         }
-        Log.d(x.toString(), "")
+        //Log.d(x.toString(), "")
 
 
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_sensors)
 
         mainHandler = Handler(Looper.getMainLooper())
