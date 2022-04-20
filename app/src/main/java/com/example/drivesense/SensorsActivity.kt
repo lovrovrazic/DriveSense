@@ -34,6 +34,7 @@ class SensorsActivity : AppCompatActivity() {
 
     lateinit var mainHandler: Handler
     var t = true
+    var counts = intArrayOf(0,0,0,0)
 
     private val updateTextTask = object : Runnable {
         override fun run() {
@@ -65,7 +66,15 @@ class SensorsActivity : AppCompatActivity() {
         val outputs = model.process(inputFeature0)
         val outputFeature0 = outputs.outputFeature0AsTensorBuffer.floatArray
 
-        Log.d("rezultat", "%.2f %.2f %.2f %.2f".format(outputFeature0[0],outputFeature0[1],outputFeature0[2],outputFeature0[3]))
+        val maxIdx = outputFeature0.asList().indexOf(outputFeature0.maxOrNull())
+        counts[maxIdx]++
+
+        Log.d("rezultat", "lanch: %.2f, acc: %.2f, steer: %.2f, break: %.2f".format(outputFeature0[0],outputFeature0[1],outputFeature0[2],outputFeature0[3]))
+
+        binding.tvDetectedLaneValue.text = "%.2f  %d".format(outputFeature0[0], counts[0])
+        binding.tvDetectedAccValue.text = "%.2f  %d".format(outputFeature0[1], counts[1])
+        binding.tvDetectedSteeringValue.text = "%.2f  %d".format(outputFeature0[2], counts[2])
+        binding.tvDetectedBreakingValue.text = "%.2f  %d".format(outputFeature0[3], counts[3])
 
         model.close()
         t = true

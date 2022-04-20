@@ -15,6 +15,10 @@
     <string name="acc_y_title">Y:</string>
     <string name="acc_z_title">Z:</string>
     <string name="sensors_button">Sensors</string>
+    <string name="detected_steering_title">Detected steering:</string>
+    <string name="detected_acceleration_title">Detected acceleration:</string>
+    <string name="detected_lane_title">Detected lane change:</string>
+    <string name="detected_breaking_title">Detected breaking:</string>
     <string name="tips_text">
         <![CDATA[
         <h2>What is eco-driving?</h2><br>
