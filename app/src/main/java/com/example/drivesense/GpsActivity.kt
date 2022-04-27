@@ -4,6 +4,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -37,6 +38,8 @@ class GpsActivity : AppCompatActivity() {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
         }
+
+        binding.tvGpsHist.setMovementMethod(ScrollingMovementMethod())
 
         mainHandler = Handler(Looper.getMainLooper())
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
@@ -75,7 +78,7 @@ class GpsActivity : AppCompatActivity() {
     private val updateLocationTask = object : Runnable {
         override fun run() {
             getActualLocation()
-            mainHandler.postDelayed(this, 5000)
+            mainHandler.postDelayed(this, 30000)
         }
     }
 
