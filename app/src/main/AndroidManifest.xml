@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DriveSense">
         <activity
+            android:name=".GpsActivity"
+            android:exported="false" />
+        <activity
             android:name=".SensorsActivity"
             android:exported="false" />
         <activity
@@ -32,7 +35,7 @@
 
         <service
             android:name="com.aware.utils.Aware_Accounts"
-            android:exported="true"/>
+            android:exported="true" />
     </application>
 
 </manifest>
