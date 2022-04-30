@@ -48,6 +48,19 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation 'com.github.denzilferreira:aware-client:master-SNAPSHOT'
-
     implementation 'com.google.android.gms:play-services-location:19.0.1'
+    implementation 'de.westnordost:osmapi-overpass:2.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1'
+}
+
+configurations {
+    // already included in Android
+    all*.exclude group: 'net.sf.kxml', module: 'kxml2'
+
+    // @NonNull etc annotations are also already included in Android
+    cleanedAnnotations
+    implementation.exclude group: 'org.jetbrains', module:'annotations'
+    implementation.exclude group: 'com.intellij', module:'annotations'
+    implementation.exclude group: 'org.intellij', module:'annotations'
 }

@@ -14,6 +14,16 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationTokenSource
+import de.westnordost.osmapi.ApiResponseReader
+import de.westnordost.osmapi.OsmConnection
+import de.westnordost.osmapi.overpass.OverpassMapDataApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import org.json.JSONTokener
+import java.io.BufferedReader
+import java.io.InputStream
 
 
 class GpsActivity : AppCompatActivity() {
@@ -22,6 +32,7 @@ class GpsActivity : AppCompatActivity() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     lateinit var mainHandler: Handler
     private lateinit var cts: CancellationTokenSource
+    private lateinit var responseHandler: ResponseHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +54,7 @@ class GpsActivity : AppCompatActivity() {
 
         mainHandler = Handler(Looper.getMainLooper())
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        responseHandler = ResponseHandler()
 
         try {
             getActualLocation()
@@ -52,9 +64,6 @@ class GpsActivity : AppCompatActivity() {
     }
 
     private fun getActualLocation() {
-
-        //val task = fusedLocationProviderClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY)
-
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 101)
             return
@@ -68,9 +77,7 @@ class GpsActivity : AppCompatActivity() {
 
         task.addOnSuccessListener {
             if (it != null){
-                binding.tvGpsHist.append("lati:%s long:%s\n".format(it.latitude, it.longitude))
-                Log.d("latitude: ${it.latitude}", "")
-                Log.d("longitude: ${it.longitude}", "")
+                getSpeedLimit(it.latitude, it.longitude)
             }
         }
     }
@@ -80,6 +87,39 @@ class GpsActivity : AppCompatActivity() {
             getActualLocation()
             mainHandler.postDelayed(this, 30000)
         }
+    }
+
+    private fun getSpeedLimit(lati: Double, long: Double) {
+        val connection = OsmConnection("https://overpass-api.de/api/", System.getProperty("http.agent"))
+        val overpass = OverpassMapDataApi(connection)
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val result = overpass.query(
+                "[out:json];\n" +
+                        "way(around:10, ${lati}, ${long})[maxspeed];\n" +
+                        "out;",
+                responseHandler
+            )
+            val maxSpeed = parseJson(result)
+            displayResult(lati, long, maxSpeed)
+        }
+    }
+
+    private fun displayResult(lati: Double, long: Double, maxSpeed: Int) {
+        binding.tvGpsHist.append("lati:%s long:%s max_speed: %d\n".format(lati, long, maxSpeed))
+    }
+
+    private fun parseJson(s: String): Int {
+        val jsonObject = JSONTokener(s).nextValue() as JSONObject
+        val jsonArray = jsonObject.getJSONArray("elements")
+
+        var maxSpeed = 0
+        for (i in 0 until jsonArray.length()) {
+            val currentSpeed = jsonArray.getJSONObject(i).getJSONObject("tags").getInt("maxspeed")
+            if (maxSpeed < currentSpeed)
+                maxSpeed = currentSpeed
+        }
+        return maxSpeed
     }
 
     override fun onResume() {
@@ -92,5 +132,22 @@ class GpsActivity : AppCompatActivity() {
         mainHandler.removeCallbacks(updateLocationTask)
         if(::cts.isInitialized)
             cts.cancel()
+    }
+}
+
+class ResponseHandler : ApiResponseReader<String> {
+    override fun parse(`in`: InputStream?): String {
+        val reader = BufferedReader(`in`?.reader())
+        val content = StringBuilder()
+        try {
+            var line = reader.readLine()
+            while (line != null) {
+                content.append(line)
+                line = reader.readLine()
+            }
+        } finally {
+            reader.close()
+        }
+        return content.toString()
     }
 }
