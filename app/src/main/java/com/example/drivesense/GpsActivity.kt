@@ -1,6 +1,7 @@
 package com.example.drivesense
 
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -77,7 +78,7 @@ class GpsActivity : AppCompatActivity() {
 
         task.addOnSuccessListener {
             if (it != null){
-                getSpeedLimit(it.latitude, it.longitude)
+                getSpeedLimit(it)
             }
         }
     }
@@ -89,24 +90,24 @@ class GpsActivity : AppCompatActivity() {
         }
     }
 
-    private fun getSpeedLimit(lati: Double, long: Double) {
+    private fun getSpeedLimit(location: Location) {
         val connection = OsmConnection("https://overpass-api.de/api/", System.getProperty("http.agent"))
         val overpass = OverpassMapDataApi(connection)
 
         GlobalScope.launch(Dispatchers.IO) {
             val result = overpass.query(
                 "[out:json];\n" +
-                        "way(around:10, ${lati}, ${long})[maxspeed];\n" +
+                        "way(around:10, ${location.latitude}, ${location.longitude})[maxspeed];\n" +
                         "out;",
                 responseHandler
             )
             val maxSpeed = parseJson(result)
-            displayResult(lati, long, maxSpeed)
+            displayResult(location.latitude, location.longitude, maxSpeed, location.speed*3.6f)
         }
     }
 
-    private fun displayResult(lati: Double, long: Double, maxSpeed: Int) {
-        binding.tvGpsHist.append("lati:%s long:%s max_speed: %d\n".format(lati, long, maxSpeed))
+    private fun displayResult(lati: Double, long: Double, maxSpeed: Int, speed: Float) {
+        binding.tvGpsHist.append("lati:%s long:%s speed_limit: %d speed: %.2f\n".format(lati, long, maxSpeed, speed))
     }
 
     private fun parseJson(s: String): Int {
