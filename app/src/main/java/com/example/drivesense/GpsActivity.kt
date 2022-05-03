@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.drivesense.databinding.ActivityGpsBinding
 import com.google.android.gms.location.*
-import com.google.android.gms.tasks.CancellationTokenSource
+//import com.google.android.gms.tasks.CancellationTokenSource
 import de.westnordost.osmapi.ApiResponseReader
 import de.westnordost.osmapi.OsmConnection
 import de.westnordost.osmapi.overpass.OverpassMapDataApi
@@ -30,7 +30,7 @@ class GpsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGpsBinding
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     lateinit var mainHandler: Handler
-    private lateinit var cts: CancellationTokenSource
+    //private lateinit var cts: CancellationTokenSource
     private lateinit var responseHandler: ResponseHandler
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
