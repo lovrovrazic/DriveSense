@@ -69,12 +69,11 @@ class SensorsActivity : AppCompatActivity() {
         val maxIdx = outputFeature0.asList().indexOf(outputFeature0.maxOrNull())
         counts[maxIdx]++
 
-        Log.d("rezultat", "lanch: %.2f, acc: %.2f, steer: %.2f, break: %.2f".format(outputFeature0[0],outputFeature0[1],outputFeature0[2],outputFeature0[3]))
+        Log.d("rezultat", "lanch: %.2f, acc: %.2f, steer: %.2f".format(outputFeature0[0],outputFeature0[1],outputFeature0[2]))
 
-        binding.tvDetectedLaneValue.text = "%.2f  %d".format(outputFeature0[0], counts[0])
-        binding.tvDetectedAccValue.text = "%.2f  %d".format(outputFeature0[1], counts[1])
-        binding.tvDetectedSteeringValue.text = "%.2f  %d".format(outputFeature0[2], counts[2])
-        binding.tvDetectedBreakingValue.text = "%.2f  %d".format(outputFeature0[3], counts[3])
+        binding.tvDetectedAccValue.text = "%.2f  %d".format(outputFeature0[2], counts[2])
+        binding.tvDetectedSteeringValue.text = "%.2f  %d".format(outputFeature0[1], counts[1])
+        binding.tvDetectedBreakingValue.text = "%.2f  %d".format(outputFeature0[0], counts[0])
 
         model.close()
         t = true
