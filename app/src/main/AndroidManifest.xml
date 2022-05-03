@@ -9,9 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DriveSense">
+
+        <activity
+            android:name=".GpsActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SensorsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".DrivingActivity"
             android:exported="false"
@@ -32,7 +38,10 @@
 
         <service
             android:name="com.aware.utils.Aware_Accounts"
-            android:exported="true"/>
+            android:exported="true" />
     </application>
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
 </manifest>

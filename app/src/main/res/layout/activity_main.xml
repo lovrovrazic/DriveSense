@@ -70,4 +70,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tips_button" />
 
+    <Button
+        android:id="@+id/gps_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:alpha="80"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
+        android:text="@string/gps_button"
+        android:textSize="18sp"
+        app:cornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sensors_button" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

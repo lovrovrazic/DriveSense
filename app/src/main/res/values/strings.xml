@@ -2,7 +2,9 @@
     <string name="app_name">driveSense</string>
     <string name="get_score_button">Get eco-score</string>
     <string name="tips_button">Eco-driving tips</string>
+    <string name="gps_button">GPS</string>
     <string name="tips_activity">Eco-driving tips</string>
+    <string name="gps_activity">GPS</string>
     <string name="sensors_activity">Sensors</string>
     <string name="getscore_activity">Eco-score</string>
     <string name="gauge_image">Gauge</string>

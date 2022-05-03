@@ -102,7 +102,7 @@ class SensorsActivity : AppCompatActivity() {
 
         if (yz_mag > 0.1 && t) {
             t = false
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 model_classification()
             }, 2000)
         }
@@ -113,8 +113,17 @@ class SensorsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.activity_sensors)
+        setSupportActionBar(findViewById(R.id.toolbar))
+
+        // calling the action bar
+        val actionBar = getSupportActionBar()
+
+        // showing the back button in action bar
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true)
+        }
 
         mainHandler = Handler(Looper.getMainLooper())
 
