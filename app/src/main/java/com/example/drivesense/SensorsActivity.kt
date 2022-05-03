@@ -16,7 +16,7 @@ import com.example.drivesense.ml.Behaviour
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import kotlin.math.pow
-
+import com.example.drivesense.MovingAverageBuffer
 
 private lateinit var binding: ActivitySensorsBinding
 
@@ -28,12 +28,15 @@ class SensorsActivity : AppCompatActivity() {
     var y_list = mutableListOf<Double>()
     var z_list = mutableListOf<Double>()
 
-    val x_buffer = CircularArray<Double>(30)
-    val y_buffer = CircularArray<Double>(30)
-    val z_buffer = CircularArray<Double>(30)
+    val x_buffer = MovingAverageBuffer(20,4)
+    val y_buffer = MovingAverageBuffer(20,4)
+    val z_buffer = MovingAverageBuffer(20,4)
+
+
+
+
 
     lateinit var mainHandler: Handler
-    var t = true
     var counts = intArrayOf(0,0,0,0)
 
     private val updateTextTask = object : Runnable {
@@ -49,16 +52,25 @@ class SensorsActivity : AppCompatActivity() {
 //          data.add(arrayOf( arrayOf(x_buffer.get(i).toFloat()),arrayOf(y_buffer.get(i).toFloat()) ,arrayOf(z_buffer.get(i).toFloat())))
 //      }
 
-        var data = FloatArray(90)
-        for (i in 0..89 step 3) {
-            data[i] = x_buffer.get(i % 30).toFloat()
-            data[i + 1] = y_buffer.get(i % 30).toFloat()
-            data[i + 2] = z_buffer.get(i % 30).toFloat()
-        }
-
         var model = Behaviour.newInstance(this)
 
-        val inputFeature0 = TensorBuffer.createFixedSize( intArrayOf(1,30,3,1), DataType.FLOAT32 )
+        var x_sample = x_buffer.get()
+        var y_sample = y_buffer.get()
+        var z_sample = z_buffer.get()
+        var data = FloatArray(60)
+
+        Log.d("x_sample", x_sample.size.toString())
+        Log.d("y_sample", x_sample.size.toString())
+        Log.d("z_sample", x_sample.size.toString())
+
+        for (i in 0..19){
+            data[i*3] = x_sample[i]
+            data[i*3+1] = y_sample[i]
+            data[i*3+2] = z_sample[i]
+        }
+
+
+        val inputFeature0 = TensorBuffer.createFixedSize( intArrayOf(1,20,3,1), DataType.FLOAT32 )
 
         inputFeature0.loadArray(data)
 
@@ -69,42 +81,37 @@ class SensorsActivity : AppCompatActivity() {
         val maxIdx = outputFeature0.asList().indexOf(outputFeature0.maxOrNull())
         counts[maxIdx]++
 
-        Log.d("rezultat", "lanch: %.2f, acc: %.2f, steer: %.2f".format(outputFeature0[0],outputFeature0[1],outputFeature0[2]))
+        Log.d("rezultat", "lanch: %.2f, acc: %.2f, steer: %.2f".format(outputFeature0[0],outputFeature0[1],outputFeature0[2], outputFeature0[3]))
 
         binding.tvDetectedAccValue.text = "%.2f  %d".format(outputFeature0[2], counts[2])
         binding.tvDetectedSteeringValue.text = "%.2f  %d".format(outputFeature0[1], counts[1])
         binding.tvDetectedBreakingValue.text = "%.2f  %d".format(outputFeature0[0], counts[0])
+        binding.tvDetectedLaneValue.text = "%.2f  %d".format(outputFeature0[3], counts[3])
 
         model.close()
-        t = true
     }
 
     fun updateText() {
+
         var x = (x_list.sum()/x_list.size) / g
-        if(x_buffer.size() >= 30) x_buffer.popFirst()
-        x_buffer.addLast(x)
         binding.tvAccXValue.text = "%.4f".format(x)
+        x_buffer.add(x)
         x_list.clear()
 
         var y = (y_list.sum()/y_list.size) / g
-        if(y_buffer.size() >= 30) y_buffer.popFirst()
-        y_buffer.addLast(y)
         binding.tvAccYValue.text = "%.4f".format(y)
+        y_buffer.add(y)
         y_list.clear()
 
         var z = (z_list.sum()/z_list.size) / g
-        if(z_buffer.size() >= 30) z_buffer.popFirst()
-        z_buffer.addLast(z)
         binding.tvAccZValue.text = "%.4f".format(z)
+        z_buffer.add(z)
         z_list.clear()
 
-        var yz_mag = Math.sqrt(y.pow(2) + z.pow(2))
+        Log.d("", doubleArrayOf(x,y,z).toString())
+        if (x_buffer.new_samples() >= 10 && x_buffer.buff_size() == 20) {
+            model_classification()
 
-        if (yz_mag > 0.1 && t) {
-            t = false
-            Handler(Looper.getMainLooper()).postDelayed({
-                model_classification()
-            }, 2000)
         }
         //Log.d(x.toString(), "")
 
