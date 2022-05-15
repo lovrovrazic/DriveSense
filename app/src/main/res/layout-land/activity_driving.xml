@@ -24,29 +24,28 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:gravity="center_vertical"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/start_button"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="-50dp"
-            android:layout_weight="3"
-            android:gravity="center">
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:paddingTop="20dp">
 
             <ImageView
                 android:id="@+id/needle_imageView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:contentDescription="@string/needle_image"
                 android:rotation="227"
                 app:srcCompat="@drawable/needle_0" />
 
             <ImageView
                 android:id="@+id/gauge_imageView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:contentDescription="@string/gauge_image"
                 app:srcCompat="@drawable/gauge_0" />
 
@@ -54,15 +53,15 @@
                 android:id="@+id/score_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="140dp"
+                android:layout_centerVertical="true"
                 android:text="@string/gauge_value"
                 android:textAlignment="center"
-                android:textSize="70sp" />
+                android:textSize="45sp" />
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -193,8 +192,8 @@
         android:alpha="80"
         android:insetTop="0dp"
         android:insetBottom="0dp"
-        android:paddingTop="24dp"
-        android:paddingBottom="24dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
         android:text="@string/start_button"
         android:textSize="18sp"
         app:cornerRadius="0dp"

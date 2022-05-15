@@ -1,12 +1,14 @@
 package com.example.drivesense
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.Display
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.collection.CircularArray
 import com.aware.Aware
 import com.aware.Aware_Preferences
 import com.aware.LinearAccelerometer
@@ -15,8 +17,6 @@ import com.example.drivesense.databinding.ActivitySensorsBinding
 import com.example.drivesense.ml.Behaviour
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
-import kotlin.math.pow
-import com.example.drivesense.MovingAverageBuffer
 
 private lateinit var binding: ActivitySensorsBinding
 
@@ -171,6 +171,25 @@ class SensorsActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
         }
+
+        resources.configuration
+    }
+
+    // Listening to the orientation config
+    // changes and generating Toast Messages
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Toast.makeText(baseContext, "Landscape Mode", Toast.LENGTH_SHORT).show()
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Toast.makeText(baseContext, "Portrait Mode", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // ali še ena varianta
+    private fun isPortrait(): Boolean {
+        val config: Configuration = resources.configuration
+        return config.orientation == Configuration.ORIENTATION_PORTRAIT
     }
 
     override fun onPause() {
