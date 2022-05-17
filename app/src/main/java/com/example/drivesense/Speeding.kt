@@ -68,7 +68,7 @@ class Speeding(activity: Activity) {
             if (speed > maxSpeed+SPEEDING_TOLERANCE) {
                 ++speedingReadings
             }
-            currentScore = 1.0 - (speedingReadings.toDouble()/validReadings)
+            currentScore = (1.0 - (speedingReadings.toDouble()/validReadings)) * 100.0
         }
     }
 
