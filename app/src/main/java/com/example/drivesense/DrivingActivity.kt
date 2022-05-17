@@ -98,7 +98,18 @@ class DrivingActivity : AppCompatActivity() {
     // changes and generating Toast Messages
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
+
         setContentView(R.layout.activity_driving)
+        setSupportActionBar(findViewById(R.id.toolbar))
+
+        // calling the action bar
+        val actionBar = getSupportActionBar()
+
+        // showing the back button in action bar
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true)
+        }
+
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             machine_learning.update_orientation(true)
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
