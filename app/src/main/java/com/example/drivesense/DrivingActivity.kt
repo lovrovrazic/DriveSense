@@ -7,23 +7,18 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.WindowManager
-import android.widget.Toast
 import com.aware.Aware
 import com.aware.Aware_Preferences
 import com.aware.LinearAccelerometer
 import com.aware.providers.Linear_Accelerometer_Provider
 import com.example.drivesense.databinding.ActivityDrivingBinding
-import com.example.drivesense.databinding.ActivitySensorsBinding
-import com.example.drivesense.ml.Behaviour
-import org.tensorflow.lite.DataType
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 
 private lateinit var binding: ActivityDrivingBinding
 
 class DrivingActivity : AppCompatActivity() {
 
     lateinit var machine_learning: Model
-
+    lateinit var speeding: Speeding
 
     lateinit var mainHandler: Handler
     var counts = intArrayOf(0,0,0,0)
@@ -35,7 +30,6 @@ class DrivingActivity : AppCompatActivity() {
         }
     }
 
-
     // average acc readings every 100ms (10Hz)
     fun average_samples() {
         // if average equal true, means that enough samples in buffer to classify
@@ -46,35 +40,18 @@ class DrivingActivity : AppCompatActivity() {
             // print counts
             Log.d("counts", counts.map { it.toString() }.toTypedArray().contentToString())
         }
-
         binding.breakingScoreTextView.text = "%d".format(counts[0])
         binding.steeringScoreTextView.text = "%d".format(counts[1])
         binding.accelerationScoreTextView.text = "%d".format(counts[2])
         binding.speedScoreTextView.text = "%d".format(counts[3])
-
-
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_driving)
-        setSupportActionBar(findViewById(R.id.toolbar))
+        initView()
 
-        // calling the action bar
-        val actionBar = getSupportActionBar()
-
-        // showing the back button in action bar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-        }
-
-        
-        binding = ActivityDrivingBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-
+        speeding = Speeding(this)
         machine_learning = Model(isHorizontal())
-
-
         mainHandler = Handler(Looper.getMainLooper())
 
         Aware.startAWARE(this) //initialise core AWARE service
@@ -94,32 +71,18 @@ class DrivingActivity : AppCompatActivity() {
 
                     // add readings list
                     machine_learning.add(x,y,z)
-
                 }
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
         }
-
-        resources.configuration
-
     }
 
     // Listening to the orientation config
     // changes and generating Toast Messages
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-
-        setContentView(R.layout.activity_driving)
-        setSupportActionBar(findViewById(R.id.toolbar))
-
-        // calling the action bar
-        val actionBar = getSupportActionBar()
-
-        // showing the back button in action bar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-        }
+        initView()
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             machine_learning.update_orientation(true)
@@ -134,15 +97,35 @@ class DrivingActivity : AppCompatActivity() {
         return config.orientation == Configuration.ORIENTATION_LANDSCAPE
     }
 
+    private fun initView() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        setContentView(R.layout.activity_driving)
+        binding = ActivityDrivingBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        setSupportActionBar(findViewById(R.id.toolbar))
+
+        // calling the action bar
+        val actionBar = getSupportActionBar()
+
+        // showing the back button in action bar
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
     override fun onPause() {
         super.onPause()
         Aware.stopLinearAccelerometer(this)
         mainHandler.removeCallbacks(updateTextTask)
+        speeding.stopLocationUpdates()
     }
 
     override fun onResume() {
         super.onResume()
         Aware.startLinearAccelerometer(this)
         mainHandler.post(updateTextTask)
+        speeding.startLocationUpdates(this)
     }
 }
