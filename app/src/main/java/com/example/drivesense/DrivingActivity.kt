@@ -78,8 +78,6 @@ class DrivingActivity : AppCompatActivity() {
         }
     }
 
-    // Listening to the orientation config
-    // changes and generating Toast Messages
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         initView()
@@ -91,7 +89,6 @@ class DrivingActivity : AppCompatActivity() {
         }
     }
 
-    // ali še ena varianta
     private fun isHorizontal(): Boolean {
         val config: Configuration = resources.configuration
         return config.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -126,6 +123,6 @@ class DrivingActivity : AppCompatActivity() {
         super.onResume()
         Aware.startLinearAccelerometer(this)
         mainHandler.post(updateTextTask)
-        speeding.startLocationUpdates(this)
+        //speeding.startLocationUpdates(this)
     }
 }
