@@ -15,6 +15,8 @@ class Model(var orientation:Boolean) {
     private val y_buffer = MovingAverageBuffer(20,4)
     private val z_buffer = MovingAverageBuffer(20,4)
 
+    private val efficiency = Efficiency()
+
     private var horizontalOrientation = orientation
 
     private val g = 9.80665
@@ -91,6 +93,9 @@ class Model(var orientation:Boolean) {
 
         // close model
         model.close()
+
+        efficiency.add(x_sample,y_sample,z_sample, maxIdx)
+
 
         return maxIdx
     }

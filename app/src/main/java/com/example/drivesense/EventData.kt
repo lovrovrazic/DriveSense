@@ -1,6 +1,8 @@
 package com.example.drivesense
 
 import kotlin.math.pow
+import kotlin.math.round
+import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 class EventData {
@@ -41,7 +43,10 @@ class EventData {
     }
 
     // calculate 90 percentile
-    fun p90():Float{
-        return 2.8f
+    fun percentile(p:Int):Float{
+        // sort mutable list
+        magPeaks.sort()
+        var ind = (p/100f * (magPeaks.size - 1)).roundToInt()
+        return magPeaks[ind]
     }
 }
