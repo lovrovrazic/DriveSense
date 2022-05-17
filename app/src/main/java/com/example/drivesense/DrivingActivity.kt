@@ -98,12 +98,11 @@ class DrivingActivity : AppCompatActivity() {
     // changes and generating Toast Messages
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
+        setContentView(R.layout.activity_driving)
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             machine_learning.update_orientation(true)
-            setContentView(R.layout.activity_driving)
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             machine_learning.update_orientation(false)
-            setContentView(R.layout.activity_driving)
         }
     }
 
