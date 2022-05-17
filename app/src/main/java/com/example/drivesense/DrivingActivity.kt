@@ -50,7 +50,7 @@ class DrivingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         initView()
 
-        speeding = Speeding(this)
+        //speeding = Speeding(this)
         machine_learning = Model(isHorizontal())
         mainHandler = Handler(Looper.getMainLooper())
 
