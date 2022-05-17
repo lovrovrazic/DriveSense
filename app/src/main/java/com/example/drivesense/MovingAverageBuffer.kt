@@ -29,12 +29,17 @@ class MovingAverageBuffer(var bufSize: Int, var period: Int) {
 
     // get sample
     fun get(): FloatArray {
-        new_samples = 0
+        reset_samples()
 
         var data = FloatArray(buffer.size())
         for (i in 0..buffer.size()-1) {
             data[i] = buffer.get(i).toFloat()
         }
         return data
+    }
+
+
+    fun reset_samples(){
+        new_samples = 0
     }
 }

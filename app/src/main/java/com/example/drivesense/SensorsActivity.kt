@@ -113,7 +113,7 @@ class SensorsActivity : AppCompatActivity() {
             model_classification()
 
         }
-        //Log.d(x.toString(), "")
+        //Log.d(x.toString(), "")l
 
 
     }
