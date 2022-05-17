@@ -12,12 +12,13 @@ import com.aware.Aware
 import com.aware.Aware_Preferences
 import com.aware.LinearAccelerometer
 import com.aware.providers.Linear_Accelerometer_Provider
+import com.example.drivesense.databinding.ActivityDrivingBinding
 import com.example.drivesense.databinding.ActivitySensorsBinding
 import com.example.drivesense.ml.Behaviour
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 
-
+private lateinit var binding: ActivityDrivingBinding
 
 class DrivingActivity : AppCompatActivity() {
 
@@ -46,6 +47,11 @@ class DrivingActivity : AppCompatActivity() {
             Log.d("counts", counts.map { it.toString() }.toTypedArray().contentToString())
         }
 
+        binding.breakingScoreTextView.text = "%d".format(counts[0])
+        binding.steeringScoreTextView.text = "%d".format(counts[1])
+        binding.accelerationScoreTextView.text = "%d".format(counts[2])
+        binding.speedScoreTextView.text = "%d".format(counts[3])
+
 
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +66,11 @@ class DrivingActivity : AppCompatActivity() {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
         }
+
+        
+        binding = ActivityDrivingBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         machine_learning = Model(isHorizontal())
 

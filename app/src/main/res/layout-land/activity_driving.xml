@@ -87,7 +87,7 @@
                         android:textAlignment="center" />
 
                     <TextView
-                        android:id="@+id/textView13"
+                        android:id="@+id/accelerationScore_textView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight=".5"
@@ -112,7 +112,7 @@
                         android:textAlignment="center" />
 
                     <TextView
-                        android:id="@+id/textView14"
+                        android:id="@+id/breakingScore_textView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight=".5"
@@ -145,7 +145,7 @@
                         android:textAlignment="center" />
 
                     <TextView
-                        android:id="@+id/textView15"
+                        android:id="@+id/steeringScore_textView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight=".5"
@@ -170,7 +170,7 @@
                         android:textAlignment="center" />
 
                     <TextView
-                        android:id="@+id/textView16"
+                        android:id="@+id/speedScore_textView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight=".5"
