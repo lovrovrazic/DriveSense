@@ -1,5 +1,6 @@
 package com.example.drivesense
 
+import android.util.Log
 import kotlin.math.pow
 import kotlin.math.round
 import kotlin.math.roundToInt
@@ -12,6 +13,7 @@ class EventData {
 
     // calculate magnitude of x,y,z axis
     fun addData(x:FloatArray, y:FloatArray, z:FloatArray){
+        Log.d("event:","calculate magnitude")
         // calculate magnitude
         val magnitude = FloatArray(20)
         for (i in 0..19){
@@ -34,6 +36,7 @@ class EventData {
     // if old event still active add last magnitude peak to list
     fun updateMag(){
         if (oldEvent){
+            Log.d("event:","mag update %f".format(lastMagPeak))
             magPeaks.add(lastMagPeak)
             // clear old event flag
             oldEvent = false

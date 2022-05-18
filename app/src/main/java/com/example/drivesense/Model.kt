@@ -87,16 +87,16 @@ class Model(var orientation:Boolean) {
         val outputFeature0 = outputs.outputFeature0AsTensorBuffer.floatArray
 
         // get output of a model
-        val maxIdx = outputFeature0.asList().indexOf(outputFeature0.maxOrNull())
+        val classification = outputFeature0.asList().indexOf(outputFeature0.maxOrNull())
 
         Log.d("orientation", horizontalOrientation.toString())
 
         // close model
         model.close()
 
-        efficiency.add(x_sample,y_sample,z_sample, maxIdx)
+        efficiency.add(x_sample,y_sample,z_sample, classification)
 
 
-        return maxIdx
+        return classification
     }
 }

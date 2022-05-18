@@ -15,6 +15,7 @@ class Efficiency {
         when (classification) {
             // breaking
             0 -> {
+                Log.d("efficiency:","breaking")
                 // add data
                 breaking.addData(x,y,z)
                 // update magnitudes of old events
@@ -23,6 +24,7 @@ class Efficiency {
             }
             // steering
             1 -> {
+                Log.d("efficiency:","steering")
                 // add data
                 steering.addData(x,y,z)
                 // update magnitudes of old events
@@ -31,6 +33,7 @@ class Efficiency {
             }
             // acceleration
             2 -> {
+                Log.d("efficiency:","acceleration")
                 // add data
                 acceleration.addData(x,y,z)
                 // update magnitudes of old events
@@ -39,13 +42,14 @@ class Efficiency {
             }
             // null
             3 -> {
+                Log.d("efficiency:","null")
                 // update magnitudes of old events
                 acceleration.updateMag()
                 breaking.updateMag()
                 steering.updateMag()
             }
-            else -> { // Note the block
-                Log.d("error:","Efficiency add classification not found")
+            else -> { // default
+                Log.d("efficiency:","classification not found")
             }
         }
 
