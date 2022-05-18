@@ -72,14 +72,14 @@ class Model(var orientation:Boolean) {
         // fill up data array
         // consider phone orientation
         if(horizontalOrientation){
-            Log.d("horizontal","classification")
+            //Log.d("horizontal","classification")
             for (i in 0..19){
                 data[i*3] = x_sample[i]
                 data[i*3+1] = y_sample[i]
                 data[i*3+2] = z_sample[i]
             }
         }else{
-            Log.d("vertical","classification")
+            //Log.d("vertical","classification")
             for (i in 0..19){
                 data[i*3] = y_sample[i]
                 data[i*3+1] = x_sample[i] * -1
@@ -99,7 +99,7 @@ class Model(var orientation:Boolean) {
         // get output of a model
         val classification = outputFeature0.asList().indexOf(outputFeature0.maxOrNull())
 
-        Log.d("orientation", horizontalOrientation.toString())
+        //Log.d("orientation", horizontalOrientation.toString())
 
         // close model
         model.close()

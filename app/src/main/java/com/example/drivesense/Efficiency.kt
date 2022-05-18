@@ -5,9 +5,9 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 class Efficiency {
-    private val breaking = EventData()
-    private val steering = EventData()
-    private val acceleration = EventData()
+    private val breaking = EventData(0.025f)
+    private val steering = EventData(0.025f)
+    private val acceleration = EventData(0.025f)
 
 
     fun add(x:FloatArray, y:FloatArray, z:FloatArray, classification:Int){
@@ -15,7 +15,7 @@ class Efficiency {
         when (classification) {
             // breaking
             0 -> {
-                Log.d("efficiency:","breaking")
+                //Log.d("efficiency:","breaking")
                 // add data
                 breaking.addData(x,y,z)
                 // update magnitudes of old events
@@ -24,7 +24,7 @@ class Efficiency {
             }
             // steering
             1 -> {
-                Log.d("efficiency:","steering")
+                //Log.d("efficiency:","steering")
                 // add data
                 steering.addData(x,y,z)
                 // update magnitudes of old events
@@ -33,7 +33,7 @@ class Efficiency {
             }
             // acceleration
             2 -> {
-                Log.d("efficiency:","acceleration")
+                //Log.d("efficiency:","acceleration")
                 // add data
                 acceleration.addData(x,y,z)
                 // update magnitudes of old events
@@ -42,7 +42,7 @@ class Efficiency {
             }
             // null
             3 -> {
-                Log.d("efficiency:","null")
+                //Log.d("efficiency:","null")
                 // update magnitudes of old events
                 acceleration.updateMag()
                 breaking.updateMag()
