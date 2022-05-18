@@ -71,10 +71,20 @@ class Model(var orientation:Boolean) {
 
         // fill up data array
         // consider phone orientation
-        for (i in 0..19){
-            data[i*3] = x_sample[i]
-            data[i*3+1] = y_sample[i]
-            data[i*3+2] = z_sample[i]
+        if(horizontalOrientation){
+            Log.d("horizontal","classification")
+            for (i in 0..19){
+                data[i*3] = x_sample[i]
+                data[i*3+1] = y_sample[i]
+                data[i*3+2] = z_sample[i]
+            }
+        }else{
+            Log.d("vertical","classification")
+            for (i in 0..19){
+                data[i*3] = y_sample[i]
+                data[i*3+1] = x_sample[i] * -1
+                data[i*3+2] = z_sample[i]
+            }
         }
 
 
