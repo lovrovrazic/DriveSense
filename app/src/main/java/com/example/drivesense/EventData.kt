@@ -1,10 +1,7 @@
 package com.example.drivesense
 
 import android.util.Log
-import kotlin.math.pow
-import kotlin.math.round
-import kotlin.math.roundToInt
-import kotlin.math.sqrt
+import kotlin.math.*
 
 class EventData(binSize:Float, eventName:String) {
     // name could be breaking, steering, acceleration
@@ -40,8 +37,29 @@ class EventData(binSize:Float, eventName:String) {
 //       oldEvent = true
 //   }
 
+    private fun getPeak(sample:FloatArray): Float {
+        return sample.map { abs(it) }.maxOrNull() ?: 0f
+    }
+
     // calculate peak of the event according to its name and orientation
     fun addData(x:FloatArray, y:FloatArray, z:FloatArray, horizontalOrientation:Boolean){
+
+        when(name){
+            "breaking" -> {
+
+            }
+            "steering" -> {
+
+            }
+            "acceleration" -> {
+
+            }
+            else -> {
+                Log.d("eventData:","name not valid")
+            }
+        }
+
+
         // calculate magnitude
         val magnitude = FloatArray(20)
         for (i in 0..19){
