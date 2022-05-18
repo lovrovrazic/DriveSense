@@ -15,11 +15,14 @@ class Model(var orientation:Boolean) {
     private val y_buffer = MovingAverageBuffer(20,4)
     private val z_buffer = MovingAverageBuffer(20,4)
 
-    private val efficiency = Efficiency()
+    private val efficiency = Efficiency(orientation)
 
     private var horizontalOrientation = orientation
 
+    private lateinit var model: Behaviour
+
     private val g = 9.80665
+
 
     // fill x,y,z lists with more than 10Hz
     fun add(x:Double, y:Double, z:Double){
@@ -51,6 +54,7 @@ class Model(var orientation:Boolean) {
     // True - horizontal, False - vertical
     fun update_orientation(orientation: Boolean){
         horizontalOrientation = orientation
+        efficiency.changeOrientation(orientation)
 
         // terminate previous sample
         x_buffer.reset_samples()
@@ -58,10 +62,17 @@ class Model(var orientation:Boolean) {
         z_buffer.reset_samples()
     }
 
+    fun startModel(contex:Context) {
+        model = Behaviour.newInstance(contex)
+    }
+
+    fun closeModel(){
+        model.close()
+    }
     //
     fun model_classification(contex:Context): Int {
         // init behaviour model
-        val model = Behaviour.newInstance(contex)
+        //startModel(contex)
 
         // get samples
         val x_sample = x_buffer.get()
@@ -102,7 +113,7 @@ class Model(var orientation:Boolean) {
         //Log.d("orientation", horizontalOrientation.toString())
 
         // close model
-        model.close()
+        //closeModel()
 
         efficiency.add(x_sample,y_sample,z_sample, classification)
 

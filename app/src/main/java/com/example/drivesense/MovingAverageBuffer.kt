@@ -1,4 +1,5 @@
 package com.example.drivesense
+import android.util.Log
 import androidx.collection.CircularArray
 
 class MovingAverageBuffer(var bufSize: Int, var period: Int) {
@@ -12,6 +13,7 @@ class MovingAverageBuffer(var bufSize: Int, var period: Int) {
             window.add(e)
         }else{
             window.removeFirst()
+            window.add(e)
             var window_average = window.sum() / window.size
             buffer.addLast(window_average)
             new_samples ++
