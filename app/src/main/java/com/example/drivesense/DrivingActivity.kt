@@ -8,6 +8,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.ImageView
 import com.aware.Aware
 import com.aware.Aware_Preferences
 import com.aware.LinearAccelerometer
@@ -58,16 +59,17 @@ class DrivingActivity : AppCompatActivity() {
     fun updateScores() {
         binding.speedScoreTextView.text = "%d".format(speeding.getCurrentScore().toInt())
 
-        binding.needleImageView.
+        //binding.needleImageView.
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initView()
 
         speeding = Speeding(this)
         machine_learning = Model(isHorizontal())
         mainHandler = Handler(Looper.getMainLooper())
+
+        initView()
 
         Aware.startAWARE(this) //initialise core AWARE service
         //sampling frequency in microseconds - default: 200000
@@ -89,24 +91,12 @@ class DrivingActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
         }
-
-        val startBtn = findViewById<Button>(R.id.start_button)
-        startBtn.setOnClickListener{
-            if (!recording) {
-                startScoring()
-                startBtn.text = getString(R.string.start_button_active)
-                recording = true
-            } else {
-                stopScoring()
-                startBtn.text = getString(R.string.start_button)
-                recording = false
-            }
-        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         initView()
+        setStartButton()
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             machine_learning.update_orientation(true)
@@ -136,20 +126,50 @@ class DrivingActivity : AppCompatActivity() {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
         }
+
+        val startBtn = findViewById<Button>(R.id.start_button)
+        startBtn.setOnClickListener{
+            if (!recording) {
+                startScoring()
+            } else {
+                stopScoring()
+            }
+        }
+
+        updateScores()
     }
 
     fun startScoring() {
+        recording = true
         Aware.startLinearAccelerometer(this)
         mainHandler.post(updateTextTask)
         mainHandler.post(updateScoresTask)
         speeding.startLocationUpdates(this)
+        setStartButton()
     }
 
     fun stopScoring() {
+        recording = false
         Aware.stopLinearAccelerometer(this)
         mainHandler.removeCallbacks(updateTextTask)
         mainHandler.removeCallbacks(updateScoresTask)
         speeding.stopLocationUpdates()
+        setStartButton()
+    }
+
+    fun setStartButton() {
+        val startBtn = findViewById<Button>(R.id.start_button)
+        if (recording) {
+            startBtn.text = getString(R.string.start_button_active)
+            startBtn.setBackgroundColor(getColor(R.color.red))
+        } else {
+            startBtn.text = getString(R.string.start_button)
+            startBtn.setBackgroundColor(getColor(R.color.green_200))
+        }
+    }
+
+    fun setOverallScore() {
+        findViewById<ImageView>(R.id.needle_imageView).animate()
     }
 
     fun resetScores() {
