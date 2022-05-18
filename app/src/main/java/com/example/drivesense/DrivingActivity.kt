@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.WindowManager
+import android.widget.Button
 import com.aware.Aware
 import com.aware.Aware_Preferences
 import com.aware.LinearAccelerometer
@@ -19,19 +20,27 @@ class DrivingActivity : AppCompatActivity() {
 
     lateinit var machine_learning: Model
     lateinit var speeding: Speeding
+    var recording: Boolean = false
 
     lateinit var mainHandler: Handler
     var counts = intArrayOf(0,0,0,0)
 
     private val updateTextTask = object : Runnable {
         override fun run() {
-            average_samples()
+            averageSamples()
             mainHandler.postDelayed(this, 100)
         }
     }
 
+    private val updateScoresTask = object : Runnable {
+        override fun run() {
+            updateScores()
+            mainHandler.postDelayed(this, 10000)
+        }
+    }
+
     // average acc readings every 100ms (10Hz)
-    fun average_samples() {
+    fun averageSamples() {
         // if average equal true, means that enough samples in buffer to classify
         if (machine_learning.average()){
             // classify: 0-breaking, 1-steering, 2-acceleration, 3-null
@@ -43,23 +52,27 @@ class DrivingActivity : AppCompatActivity() {
         binding.breakingScoreTextView.text = "%d".format(counts[0])
         binding.steeringScoreTextView.text = "%d".format(counts[1])
         binding.accelerationScoreTextView.text = "%d".format(counts[2])
-        binding.speedScoreTextView.text = "%d".format(counts[3])
+        //binding.speedScoreTextView.text = "%d".format(counts[3])
+    }
+
+    fun updateScores() {
+        binding.speedScoreTextView.text = "%d".format(speeding.getCurrentScore().toInt())
+
+        binding.needleImageView.
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
 
-        //speeding = Speeding(this)
+        speeding = Speeding(this)
         machine_learning = Model(isHorizontal())
         mainHandler = Handler(Looper.getMainLooper())
 
         Aware.startAWARE(this) //initialise core AWARE service
-        //sampling frequency in microseconds
-        //Aware.setSetting(this, Aware_Preferences.FREQUENCY_LINEAR_ACCELEROMETER, 200000)
+        //sampling frequency in microseconds - default: 200000
         Aware.setSetting(this, Aware_Preferences.FREQUENCY_LINEAR_ACCELEROMETER, 10000)
-        // intensity threshold to report the reading
-        // Aware.setSetting(this, Aware_Preferences.THRESHOLD_LINEAR_ACCELEROMETER, 0.02f)
+        // intensity threshold to report the reading - default: 0.02f
         Aware.setSetting(this, Aware_Preferences.THRESHOLD_LINEAR_ACCELEROMETER, 0.001f)
 
         LinearAccelerometer.setSensorObserver { data ->
@@ -74,6 +87,19 @@ class DrivingActivity : AppCompatActivity() {
                 }
             } catch (e: InterruptedException) {
                 e.printStackTrace()
+            }
+        }
+
+        val startBtn = findViewById<Button>(R.id.start_button)
+        startBtn.setOnClickListener{
+            if (!recording) {
+                startScoring()
+                startBtn.text = getString(R.string.start_button_active)
+                recording = true
+            } else {
+                stopScoring()
+                startBtn.text = getString(R.string.start_button)
+                recording = false
             }
         }
     }
@@ -112,17 +138,30 @@ class DrivingActivity : AppCompatActivity() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
+    fun startScoring() {
+        Aware.startLinearAccelerometer(this)
+        mainHandler.post(updateTextTask)
+        mainHandler.post(updateScoresTask)
+        speeding.startLocationUpdates(this)
+    }
+
+    fun stopScoring() {
         Aware.stopLinearAccelerometer(this)
         mainHandler.removeCallbacks(updateTextTask)
+        mainHandler.removeCallbacks(updateScoresTask)
         speeding.stopLocationUpdates()
+    }
+
+    fun resetScores() {
+        binding.speedScoreTextView.text = "0"
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopScoring()
     }
 
     override fun onResume() {
         super.onResume()
-        Aware.startLinearAccelerometer(this)
-        mainHandler.post(updateTextTask)
-        //speeding.startLocationUpdates(this)
     }
 }
