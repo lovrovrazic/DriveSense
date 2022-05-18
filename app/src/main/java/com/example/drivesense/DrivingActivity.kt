@@ -58,6 +58,7 @@ class DrivingActivity : AppCompatActivity() {
 
     fun updateScores() {
         binding.speedScoreTextView.text = "%d".format(speeding.getCurrentScore().toInt())
+        setOverallScore(55)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -139,6 +140,7 @@ class DrivingActivity : AppCompatActivity() {
 
     fun startScoring() {
         recording = true
+        machine_learning.startModel(this)
         Aware.startLinearAccelerometer(this)
         mainHandler.post(updateTextTask)
         mainHandler.post(updateScoresTask)
@@ -148,6 +150,7 @@ class DrivingActivity : AppCompatActivity() {
 
     fun stopScoring() {
         recording = false
+        machine_learning.closeModel()
         Aware.stopLinearAccelerometer(this)
         mainHandler.removeCallbacks(updateTextTask)
         mainHandler.removeCallbacks(updateScoresTask)
@@ -166,8 +169,8 @@ class DrivingActivity : AppCompatActivity() {
         }
     }
 
-    fun setOverallScore() {
-        findViewById<ImageView>(R.id.needle_imageView).animate()
+    fun setOverallScore(score: Int) {
+        findViewById<ImageView>(R.id.needle_imageView).animate().setDuration(1000).rotation((score-50)*2.69f).start()
     }
 
     fun resetScores() {

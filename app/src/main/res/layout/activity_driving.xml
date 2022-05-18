@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/needle_image"
-                android:rotation="227"
+                android:rotation="-134.5"
                 app:srcCompat="@drawable/needle_0" />
 
             <ImageView
