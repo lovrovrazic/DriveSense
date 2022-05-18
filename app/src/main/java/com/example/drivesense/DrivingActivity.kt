@@ -58,7 +58,7 @@ class DrivingActivity : AppCompatActivity() {
     fun updateScores() {
         binding.speedScoreTextView.text = "%d".format(speeding.getCurrentScore().toInt())
 
-        binding.needleImageView.
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

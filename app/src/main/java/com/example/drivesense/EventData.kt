@@ -6,7 +6,10 @@ import kotlin.math.round
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
-class EventData(binSize:Float) {
+class EventData(binSize:Float, eventName:String) {
+    // name could be breaking, steering, acceleration
+    private var name = eventName
+
     private var lastMagPeak:Float = 0f
     private var oldEvent = false
 
@@ -15,12 +18,30 @@ class EventData(binSize:Float) {
     private var peaks = mutableListOf<Int>()
     private var numberOfEvents = 0
 
-    init {
-        peaks.add(0)
-    }
 
-    // calculate magnitude of x,y,z axis
-    fun addData(x:FloatArray, y:FloatArray, z:FloatArray){
+//   // calculate magnitude of x,y,z axis
+//   fun addData(x:FloatArray, y:FloatArray, z:FloatArray){
+//       // calculate magnitude
+//       val magnitude = FloatArray(20)
+//       for (i in 0..19){
+//           magnitude[i] = sqrt(x[i].pow(2) + y[i].pow(2) + z[i].pow(2))
+//       }
+//       // find peak/max magnitude
+//       var maxMag = magnitude.maxOrNull() ?: 0f
+
+
+//       if ((lastMagPeak < maxMag && oldEvent) || (!oldEvent)){
+//           // if old event is still active, check if new max magnitude greater than old max magnitude
+//           // if new event update magnitude
+//           lastMagPeak = maxMag
+//       }
+
+//       // update oldEvent flag
+//       oldEvent = true
+//   }
+
+    // calculate peak of the event according to its name and orientation
+    fun addData(x:FloatArray, y:FloatArray, z:FloatArray, horizontalOrientation:Boolean){
         // calculate magnitude
         val magnitude = FloatArray(20)
         for (i in 0..19){
@@ -68,7 +89,6 @@ class EventData(binSize:Float) {
                 // when number under 0, we hit the percentile threshold
                 break
             }
-
         }
         return threshold
     }
@@ -95,5 +115,10 @@ class EventData(binSize:Float) {
         while(peaks.size <= newSize){
             peaks.add(0)
         }
+    }
+
+    // get name of this class
+    fun name():String{
+        return name
     }
 }

@@ -4,10 +4,12 @@ import android.util.Log
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-class Efficiency {
-    private val breaking = EventData(0.025f)
-    private val steering = EventData(0.025f)
-    private val acceleration = EventData(0.025f)
+class Efficiency(orientation:Boolean) {
+    private val breaking = EventData(0.025f, "breaking")
+    private val steering = EventData(0.025f, "steering")
+    private val acceleration = EventData(0.025f, "acceleration")
+
+    private var horizontalOrientation =  orientation
 
 
     fun add(x:FloatArray, y:FloatArray, z:FloatArray, classification:Int){
@@ -17,7 +19,7 @@ class Efficiency {
             0 -> {
                 //Log.d("efficiency:","breaking")
                 // add data
-                breaking.addData(x,y,z)
+                breaking.addData(x,y,z, horizontalOrientation)
                 // update magnitudes of old events
                 steering.updateMag()
                 acceleration.updateMag()
@@ -26,7 +28,7 @@ class Efficiency {
             1 -> {
                 //Log.d("efficiency:","steering")
                 // add data
-                steering.addData(x,y,z)
+                steering.addData(x,y,z, horizontalOrientation)
                 // update magnitudes of old events
                 breaking.updateMag()
                 acceleration.updateMag()
@@ -35,7 +37,7 @@ class Efficiency {
             2 -> {
                 //Log.d("efficiency:","acceleration")
                 // add data
-                acceleration.addData(x,y,z)
+                acceleration.addData(x,y,z, horizontalOrientation)
                 // update magnitudes of old events
                 breaking.updateMag()
                 steering.updateMag()
@@ -53,6 +55,10 @@ class Efficiency {
             }
         }
 
+    }
+
+    fun changeOrientation(orientation: Boolean){
+        horizontalOrientation =  orientation
     }
 
 }
