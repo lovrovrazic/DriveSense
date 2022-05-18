@@ -6,14 +6,21 @@ import kotlin.math.round
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
-class EventData {
+class EventData(binSize:Float) {
     private var lastMagPeak:Float = 0f
     private var oldEvent = false
-    private var magPeaks = mutableListOf<Float>()
+
+
+    private var binSize = binSize
+    private var peaks = mutableListOf<Int>()
+    private var numberOfEvents = 0
+
+    init {
+        peaks.add(0)
+    }
 
     // calculate magnitude of x,y,z axis
     fun addData(x:FloatArray, y:FloatArray, z:FloatArray){
-        Log.d("event:","calculate magnitude")
         // calculate magnitude
         val magnitude = FloatArray(20)
         for (i in 0..19){
@@ -36,20 +43,57 @@ class EventData {
     // if old event still active add last magnitude peak to list
     fun updateMag(){
         if (oldEvent){
-            Log.d("event:","mag update %f".format(lastMagPeak))
-            magPeaks.add(lastMagPeak)
+            //peaks.add(lastMagPeak)
+            addPeak(lastMagPeak)
             // clear old event flag
             oldEvent = false
             // set magnitude to 0
             lastMagPeak = 0f
+            Log.d("peaks", peaks.map { it.toString() }.toTypedArray().contentToString())
         }
     }
 
-    // calculate 90 percentile
+    // calculates percentile
     fun percentile(p:Int):Float{
-        // sort mutable list
-        magPeaks.sort()
-        var ind = (p/100f * (magPeaks.size - 1)).roundToInt()
-        return magPeaks[ind]
+        var threshold: Float = 0f
+        // calculate number of events inside percentile
+        var eventsBelowPercentile: Int = (p/100f * numberOfEvents).roundToInt()
+        // iterate through list and find percentile
+        for ((index, value) in peaks.withIndex()){
+            // subtract number of peaks in the bin from number of events below the percentile
+            eventsBelowPercentile -= value
+            // calculate threshold
+            threshold = (index * binSize).toFloat()
+            if (eventsBelowPercentile <= 0){
+                // when number under 0, we hit the percentile threshold
+                break
+            }
+
+        }
+        return threshold
+    }
+
+    // adds new peak into the list,
+    private fun addPeak(peak:Float){
+        // increase number of events
+        ++numberOfEvents
+        // get number of a bin, floor round the result
+        val binNumber: Int = (peak / binSize).toInt()
+        // check if mutable list big enough
+        if (peaks.size > binNumber){
+            peaks[binNumber]++
+        }else{
+            // add bins to mutable list so that you can store result
+            resizeList(binNumber)
+            peaks[binNumber]++
+        }
+
+    }
+
+    // adds new bins too the peaks list
+    private fun resizeList(newSize:Int){
+        while(peaks.size <= newSize){
+            peaks.add(0)
+        }
     }
 }
