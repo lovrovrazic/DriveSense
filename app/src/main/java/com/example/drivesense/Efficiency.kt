@@ -6,12 +6,15 @@ import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 class Efficiency() {
-    private val breaking = EventData(0.025f, "breaking")
-    private val steering = EventData(0.025f, "steering")
-    private val acceleration = EventData(0.025f, "acceleration")
     // thresholds
-    private val normal = 0.1f
-    private val aggressive = 0.6f
+    private val normal = 0.15f
+    private val aggressive = 0.5f
+    private val binSize = 0.025f
+
+    private val breaking = EventData(binSize, "breaking")
+    private val steering = EventData(binSize, "steering")
+    private val acceleration = EventData(binSize, "acceleration")
+
 
 
 
@@ -82,6 +85,40 @@ class Efficiency() {
                 ((1 - ((percentile - lowerBound)/(upperBound - lowerBound))) * 100).roundToInt()
             }
         }
+    }
+
+
+    // new scoring approach
+    fun getNewScoreBreaking(): Int {
+        return getNewPercentages(breaking.getListOfPeaks(), normal, aggressive)
+    }
+    fun getNewScoreSteering(): Int {
+        return getNewPercentages(steering.getListOfPeaks(), normal, aggressive)
+    }
+
+    fun getNewScoreAcceleration(): Int {
+        return getNewPercentages(acceleration.getListOfPeaks(), normal, aggressive)
+    }
+
+    private fun getNewPercentages(peaks:MutableList<Int>, lowerBound:Float, upperBound:Float):Int{
+        // get number of events
+        val numberOfEvents:Int = peaks.sum()
+        // if 0 events return score 100
+        if (numberOfEvents == 0){return 100}
+
+        // calculate score
+        val peaksScores = peaks.foldIndexed(0) { index, sum, element -> when{
+            // normal driving, 100% score
+            index * binSize < lowerBound -> sum + (element * 100)
+            // aggressive driving 0% score
+            index * binSize > upperBound -> sum
+            // in between calculate percentages
+            else -> {
+                sum + ((1 - ((index * binSize - lowerBound)/(upperBound - lowerBound))) * 100 * element).roundToInt()
+            }
+        }}
+
+        return (peaksScores / numberOfEvents)
     }
 
 

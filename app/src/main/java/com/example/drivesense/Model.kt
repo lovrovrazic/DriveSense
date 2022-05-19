@@ -128,13 +128,13 @@ class Model(var orientation:Boolean) {
     }
 
     fun getScoreBreaking(): Int {
-        return efficiency.getScoreBreaking()
+        return efficiency.getNewScoreBreaking()
     }
     fun getScoreSteering(): Int {
-        return efficiency.getScoreSteering()
+        return efficiency.getNewScoreSteering()
     }
 
     fun getScoreAcceleration(): Int {
-        return efficiency.getScoreAcceleration()
+        return efficiency.getNewScoreAcceleration()
     }
 }

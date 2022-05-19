@@ -135,4 +135,11 @@ class EventData(binSize:Float, eventName:String) {
     fun name():String{
         return name
     }
+
+    // get peaks
+    fun getListOfPeaks(): MutableList<Int> {
+        return peaks
+    }
+
+
 }
