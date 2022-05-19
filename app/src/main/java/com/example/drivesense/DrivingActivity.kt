@@ -50,15 +50,23 @@ class DrivingActivity : AppCompatActivity() {
             // print counts
             Log.d("counts", counts.map { it.toString() }.toTypedArray().contentToString())
         }
-        binding.breakingScoreTextView.text = "%d".format(counts[0])
-        binding.steeringScoreTextView.text = "%d".format(counts[1])
-        binding.accelerationScoreTextView.text = "%d".format(counts[2])
+        //binding.breakingScoreTextView.text = "%d".format(counts[0])
+        //binding.steeringScoreTextView.text = "%d".format(counts[1])
+        //binding.accelerationScoreTextView.text = "%d".format(counts[2])
         //binding.speedScoreTextView.text = "%d".format(counts[3])
     }
 
     fun updateScores() {
         binding.speedScoreTextView.text = "%d".format(speeding.getCurrentScore().toInt())
         setOverallScore(55)
+
+        // update breaking, steering, acceleration scores
+        Log.d("breaking score", "%d".format(machine_learning.getScoreBreaking()))
+        Log.d("steering score", "%d".format(machine_learning.getScoreSteering()))
+        Log.d("acceleration score", "%d".format(machine_learning.getScoreAcceleration()))
+        binding.breakingScoreTextView.text = "%d".format(machine_learning.getScoreBreaking())
+        binding.steeringScoreTextView.text = "%d".format(machine_learning.getScoreSteering())
+        binding.accelerationScoreTextView.text = "%d".format(machine_learning.getScoreAcceleration())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
