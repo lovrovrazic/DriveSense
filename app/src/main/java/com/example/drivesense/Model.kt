@@ -15,7 +15,7 @@ class Model(var orientation:Boolean) {
     private val y_buffer = MovingAverageBuffer(20,4)
     private val z_buffer = MovingAverageBuffer(20,4)
 
-    private val efficiency = Efficiency(orientation)
+    private val efficiency = Efficiency()
 
     private var horizontalOrientation = orientation
 
@@ -54,7 +54,6 @@ class Model(var orientation:Boolean) {
     // True - horizontal, False - vertical
     fun update_orientation(orientation: Boolean){
         horizontalOrientation = orientation
-        efficiency.changeOrientation(orientation)
 
         // terminate previous sample
         x_buffer.reset_samples()
@@ -75,27 +74,34 @@ class Model(var orientation:Boolean) {
         //startModel(contex)
 
         // get samples
-        val x_sample = x_buffer.get()
-        val y_sample = y_buffer.get()
-        val z_sample = z_buffer.get()
+        var x_sample:FloatArray = x_buffer.get()
+        var y_sample:FloatArray = y_buffer.get()
+        val z_sample:FloatArray = z_buffer.get()
         val data = FloatArray(60)
 
+        // if orientation not horizontal change axis
+        if (!horizontalOrientation){
+            // z <- z
+            // z_sample = z_sample
+            // x <- y
+            val x_temp:FloatArray = x_sample
+            x_sample = y_sample
+            // y <- -x
+            for (i in x_temp.indices) {
+                // multiply x axis with -1
+                x_temp[i] = x_temp[i] * -1
+            }
+            y_sample = x_temp
+
+        }
+
+
+
         // fill up data array
-        // consider phone orientation
-        if(horizontalOrientation){
-            //Log.d("horizontal","classification")
-            for (i in 0..19){
-                data[i*3] = x_sample[i]
-                data[i*3+1] = y_sample[i]
-                data[i*3+2] = z_sample[i]
-            }
-        }else{
-            //Log.d("vertical","classification")
-            for (i in 0..19){
-                data[i*3] = y_sample[i]
-                data[i*3+1] = x_sample[i] * -1
-                data[i*3+2] = z_sample[i]
-            }
+        for (i in 0..19){
+            data[i*3] = x_sample[i]
+            data[i*3+1] = y_sample[i]
+            data[i*3+2] = z_sample[i]
         }
 
 
@@ -116,6 +122,7 @@ class Model(var orientation:Boolean) {
         //closeModel()
 
         efficiency.add(x_sample,y_sample,z_sample, classification)
+        efficiency.getScore()
 
 
         return classification

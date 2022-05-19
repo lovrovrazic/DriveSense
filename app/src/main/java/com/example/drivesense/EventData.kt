@@ -7,7 +7,7 @@ class EventData(binSize:Float, eventName:String) {
     // name could be breaking, steering, acceleration
     private var name = eventName
 
-    private var lastMagPeak:Float = 0f
+    private var lastPeak:Float = 0f
     private var oldEvent = false
 
 
@@ -41,38 +41,34 @@ class EventData(binSize:Float, eventName:String) {
         return sample.map { abs(it) }.maxOrNull() ?: 0f
     }
 
-    // calculate peak of the event according to its name and orientation
-    fun addData(x:FloatArray, y:FloatArray, z:FloatArray, horizontalOrientation:Boolean){
-
+    // calculate peak of the event
+    fun addData(x:FloatArray, y:FloatArray, z:FloatArray){
+        var curPeak = 0f
+        // calculate peak
         when(name){
             "breaking" -> {
-
+                // we look at z axis
+                curPeak = getPeak(z)
             }
             "steering" -> {
-
+                // we look at y axis
+                curPeak = getPeak(y)
             }
             "acceleration" -> {
-
+                // we look at z axis
+                curPeak = getPeak(z)
             }
             else -> {
                 Log.d("eventData:","name not valid")
             }
         }
 
+        Log.d("curPeak", "%f".format(curPeak))
 
-        // calculate magnitude
-        val magnitude = FloatArray(20)
-        for (i in 0..19){
-            magnitude[i] = sqrt(x[i].pow(2) + y[i].pow(2) + z[i].pow(2))
-        }
-        // find peak/max magnitude
-        var maxMag = magnitude.maxOrNull() ?: 0f
-
-
-        if ((lastMagPeak < maxMag && oldEvent) || (!oldEvent)){
-            // if old event is still active, check if new max magnitude greater than old max magnitude
-            // if new event update magnitude
-            lastMagPeak = maxMag
+        if ((lastPeak < curPeak && oldEvent) || (!oldEvent)){
+            // if old event is still active, check if new peak greater than old peak
+            // if new event update peak
+            lastPeak = curPeak
         }
 
         // update oldEvent flag
@@ -83,11 +79,11 @@ class EventData(binSize:Float, eventName:String) {
     fun updateMag(){
         if (oldEvent){
             //peaks.add(lastMagPeak)
-            addPeak(lastMagPeak)
+            addPeak(lastPeak)
             // clear old event flag
             oldEvent = false
             // set magnitude to 0
-            lastMagPeak = 0f
+            lastPeak = 0f
             Log.d("peaks", peaks.map { it.toString() }.toTypedArray().contentToString())
         }
     }
