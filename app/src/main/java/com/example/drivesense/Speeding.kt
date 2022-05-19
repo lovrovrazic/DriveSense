@@ -4,6 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -32,6 +35,7 @@ class Speeding(activity: Activity) {
     private var speedingReadings: Int
     private val DETECTION_THRESHOLD = 10 //kmph
     private val SPEEDING_TOLERANCE = 5 //kmph
+    private val context: Context
 
     init {
         mainHandler = Handler(Looper.getMainLooper())
@@ -40,6 +44,7 @@ class Speeding(activity: Activity) {
         currentScore = 100.0
         validReadings = 0
         speedingReadings = 0
+        context = activity
 
         locationRequest = LocationRequest.create().apply {
             interval = 30000
@@ -50,6 +55,10 @@ class Speeding(activity: Activity) {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 p0 ?: return
+                if (!checkForInternet()) {
+                    Log.d("GPS", "NO INTERNET")
+                    return
+                }
                 for (location in p0.locations){
                     getSpeedLimit(location)
                 }
@@ -77,15 +86,19 @@ class Speeding(activity: Activity) {
         val overpass = OverpassMapDataApi(connection)
 
         GlobalScope.launch(Dispatchers.IO) {
-            val result = overpass.query(
-                "[out:json];\n" +
-                        "way(around:20, ${location.latitude}, ${location.longitude})[maxspeed];\n" +
-                        "out;",
-                responseHandler
-            )
-            val maxSpeed = parseJson(result)
-            Log.d("GPS", "lati:%s long:%s speed_lim: %d speed: %.2f".format(location.latitude, location.longitude, maxSpeed, location.speed*3.6f))
-            updateScore(location, maxSpeed)
+            try {
+                val result = overpass.query(
+                    "[out:json];\n" +
+                            "way(around:20, ${location.latitude}, ${location.longitude})[maxspeed];\n" +
+                            "out;",
+                    responseHandler
+                )
+                val maxSpeed = parseJson(result)
+                Log.d("GPS", "lati:%s long:%s speed_lim: %d speed: %.2f".format(location.latitude, location.longitude, maxSpeed, location.speed*3.6f))
+                updateScore(location, maxSpeed)
+            } catch (e: Exception) {
+                Log.d("GPS", e.toString())
+            }
         }
     }
 
@@ -114,6 +127,45 @@ class Speeding(activity: Activity) {
 
     fun stopLocationUpdates() {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+    }
+
+    private fun checkForInternet(): Boolean {
+
+        // register activity with the connectivity manager service
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        // if the android version is equal to M
+        // or greater we need to use the
+        // NetworkCapabilities to check what type of
+        // network has the internet connection
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            // Returns a Network object corresponding to
+            // the currently active default data network.
+            val network = connectivityManager.activeNetwork ?: return false
+
+            // Representation of the capabilities of an active network.
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                // Indicates this network uses a Wi-Fi transport,
+                // or WiFi has network connectivity
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+                // Indicates this network uses a Cellular transport. or
+                // Cellular has network connectivity
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+                // else return false
+                else -> false
+            }
+        } else {
+            // if the android version is below M
+            @Suppress("DEPRECATION") val networkInfo =
+                connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
     }
 }
 
