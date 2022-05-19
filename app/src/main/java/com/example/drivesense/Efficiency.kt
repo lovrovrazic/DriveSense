@@ -10,8 +10,8 @@ class Efficiency() {
     private val steering = EventData(0.025f, "steering")
     private val acceleration = EventData(0.025f, "acceleration")
     // thresholds
-    private val normal = 0.28f
-    private val aggressive = 0.55f
+    private val normal = 0.1f
+    private val aggressive = 0.6f
 
 
 
@@ -60,10 +60,15 @@ class Efficiency() {
 
     }
 
-    fun getScore(){
-        Log.d("breaking","%d".format(getPercentages(breaking.percentile(90), normal, aggressive)))
-        Log.d("steering","%d".format(getPercentages(steering.percentile(90), normal, aggressive)))
-        Log.d("acceleration","%d".format(getPercentages(acceleration.percentile(90), normal, aggressive)))
+    fun getScoreBreaking(): Int {
+        return getPercentages(breaking.percentile(90), normal, aggressive)
+    }
+    fun getScoreSteering(): Int {
+        return getPercentages(steering.percentile(90), normal, aggressive)
+    }
+
+    fun getScoreAcceleration(): Int {
+        return getPercentages(acceleration.percentile(90), normal, aggressive)
     }
 
     private fun getPercentages(percentile:Float, lowerBound:Float, upperBound:Float):Int{

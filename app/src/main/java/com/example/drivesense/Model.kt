@@ -122,9 +122,19 @@ class Model(var orientation:Boolean) {
         //closeModel()
 
         efficiency.add(x_sample,y_sample,z_sample, classification)
-        efficiency.getScore()
 
 
         return classification
+    }
+
+    fun getScoreBreaking(): Int {
+        return efficiency.getScoreBreaking()
+    }
+    fun getScoreSteering(): Int {
+        return efficiency.getScoreSteering()
+    }
+
+    fun getScoreAcceleration(): Int {
+        return efficiency.getScoreAcceleration()
     }
 }
