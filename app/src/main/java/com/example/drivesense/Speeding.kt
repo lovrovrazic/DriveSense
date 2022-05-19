@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
 import de.westnordost.osmapi.ApiResponseReader
@@ -57,6 +58,7 @@ class Speeding(activity: Activity) {
                 p0 ?: return
                 if (!checkForInternet()) {
                     Log.d("GPS", "NO INTERNET")
+                    Toast.makeText(context, "No internet", Toast.LENGTH_SHORT).show()
                     return
                 }
                 for (location in p0.locations){
