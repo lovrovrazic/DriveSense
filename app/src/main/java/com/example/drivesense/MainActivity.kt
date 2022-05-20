@@ -27,11 +27,5 @@ class MainActivity : AppCompatActivity() {
             val Intent = Intent(this, SensorsActivity::class.java)
             startActivity(Intent)
         }
-
-        val gpsBtn = findViewById<Button>(R.id.gps_button)
-        gpsBtn.setOnClickListener{
-            val Intent = Intent(this, GpsActivity::class.java)
-            startActivity(Intent)
-        }
     }
 }
