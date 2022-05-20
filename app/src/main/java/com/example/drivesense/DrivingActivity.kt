@@ -57,16 +57,22 @@ class DrivingActivity : AppCompatActivity() {
     }
 
     fun updateScores() {
-        binding.speedScoreTextView.text = "%d".format(speeding.getCurrentScore().toInt())
-        setOverallScore(55)
+        val breakingScore = machine_learning.getScoreBreaking()
+        val accelerationScore = machine_learning.getScoreAcceleration()
+        val steeringScore = machine_learning.getScoreSteering()
+        val speedingScore = speeding.getCurrentScore().toInt()
 
         // update breaking, steering, acceleration scores
-        Log.d("breaking score", "%d".format(machine_learning.getScoreBreaking()))
-        Log.d("steering score", "%d".format(machine_learning.getScoreSteering()))
-        Log.d("acceleration score", "%d".format(machine_learning.getScoreAcceleration()))
-        binding.breakingScoreTextView.text = "%d".format(machine_learning.getScoreBreaking())
-        binding.steeringScoreTextView.text = "%d".format(machine_learning.getScoreSteering())
-        binding.accelerationScoreTextView.text = "%d".format(machine_learning.getScoreAcceleration())
+        Log.d("breaking score", "%d".format(breakingScore))
+        Log.d("steering score", "%d".format(steeringScore))
+        Log.d("acceleration score", "%d".format(accelerationScore))
+        binding.breakingScoreTextView.text = "%d".format(breakingScore)
+        binding.steeringScoreTextView.text = "%d".format(steeringScore)
+        binding.accelerationScoreTextView.text = "%d".format(accelerationScore)
+        binding.speedScoreTextView.text = "%d".format(speedingScore)
+
+        val overAll = (breakingScore+accelerationScore+steeringScore+speedingScore)/4
+        setOverallScore(overAll)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -179,6 +185,7 @@ class DrivingActivity : AppCompatActivity() {
 
     fun setOverallScore(score: Int) {
         findViewById<ImageView>(R.id.needle_imageView).animate().setDuration(1000).rotation((score-50)*2.69f).start()
+        binding.scoreTextView.text = "%d".format("%d", score)
     }
 
     fun resetScores() {
