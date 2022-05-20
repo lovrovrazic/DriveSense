@@ -272,9 +272,9 @@ class DrivingActivity : AppCompatActivity() {
 //   }
 
     fun colorInterpolation(percent:Int): Int {
-        val h = (percent/100f) * 0.34f * 360 // Hue (note 0.4 = Green, see huge chart below)
-        val s = 0.35f // Saturation
-        val b = 0.85f // Brightness
+        val h = (percent/100f) * 0.3f * 360 // Hue (note 0.4 = Green, see huge chart below)
+        val s = 0.74f + ((percent/100f) * 0.26f)
+        val b = 0.90f - ((percent/100f) * 0.23f)
 
         return Color.HSVToColor(floatArrayOf(h,s,b))
     }
