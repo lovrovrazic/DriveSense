@@ -104,7 +104,7 @@ class Efficiency() {
         // get number of events
         val numberOfEvents:Int = peaks.sum()
         // if 0 events return score 100
-        if (numberOfEvents == 0){return 100}
+        if (numberOfEvents == 0){return 0}
 
         // calculate score
         val peaksScores = peaks.foldIndexed(0) { index, sum, element -> when{

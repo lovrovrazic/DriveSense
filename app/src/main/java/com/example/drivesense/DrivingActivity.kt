@@ -22,6 +22,10 @@ class DrivingActivity : AppCompatActivity() {
     lateinit var machine_learning: Model
     lateinit var speeding: Speeding
     var recording: Boolean = false
+    var breakingScore: Int = 0
+    var accelerationScore: Int = 0
+    var steeringScore: Int = 0
+    var speedingScore: Int = 0
 
     lateinit var mainHandler: Handler
     var counts = intArrayOf(0,0,0,0)
@@ -57,10 +61,10 @@ class DrivingActivity : AppCompatActivity() {
     }
 
     fun updateScores() {
-        val breakingScore = machine_learning.getScoreBreaking()
-        val accelerationScore = machine_learning.getScoreAcceleration()
-        val steeringScore = machine_learning.getScoreSteering()
-        val speedingScore = speeding.getCurrentScore().toInt()
+        breakingScore = machine_learning.getScoreBreaking()
+        accelerationScore = machine_learning.getScoreAcceleration()
+        steeringScore = machine_learning.getScoreSteering()
+        speedingScore = speeding.getCurrentScore()
 
         // update breaking, steering, acceleration scores
         Log.d("breaking score", "%d".format(breakingScore))
@@ -185,7 +189,7 @@ class DrivingActivity : AppCompatActivity() {
 
     fun setOverallScore(score: Int) {
         findViewById<ImageView>(R.id.needle_imageView).animate().setDuration(1000).rotation((score-50)*2.69f).start()
-        binding.scoreTextView.text = "%d".format("%d", score)
+        binding.scoreTextView.text = "%d".format(score)
     }
 
     fun resetScores() {

@@ -42,7 +42,7 @@ class Speeding(activity: Activity) {
         mainHandler = Handler(Looper.getMainLooper())
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
         responseHandler = ResponseHandler()
-        currentScore = 100.0
+        currentScore = 0.0
         validReadings = 0
         speedingReadings = 0
         context = activity
@@ -68,8 +68,8 @@ class Speeding(activity: Activity) {
         }
     }
 
-    fun getCurrentScore(): Double {
-        return currentScore
+    fun getCurrentScore(): Int {
+        return currentScore.toInt()
     }
 
     private fun updateScore(location: Location, maxSpeed: Int) {
