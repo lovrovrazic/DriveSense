@@ -1,6 +1,7 @@
 package com.example.drivesense
 
 import android.content.res.Configuration
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -9,6 +10,8 @@ import android.util.Log
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import com.aware.Aware
 import com.aware.Aware_Preferences
 import com.aware.LinearAccelerometer
@@ -71,9 +74,13 @@ class DrivingActivity : AppCompatActivity() {
         Log.d("steering score", "%d".format(steeringScore))
         Log.d("acceleration score", "%d".format(accelerationScore))
         binding.breakingScoreTextView.text = "%d".format(breakingScore)
+        binding.breakingScoreTextView.setTextColor(colorInterpolation(breakingScore))
         binding.steeringScoreTextView.text = "%d".format(steeringScore)
+        binding.steeringScoreTextView.setTextColor(colorInterpolation(steeringScore))
         binding.accelerationScoreTextView.text = "%d".format(accelerationScore)
+        binding.accelerationScoreTextView.setTextColor(colorInterpolation(accelerationScore))
         binding.speedScoreTextView.text = "%d".format(speedingScore)
+        binding.speedScoreTextView.setTextColor(colorInterpolation(speedingScore))
 
         val overAll = (breakingScore+accelerationScore+steeringScore+speedingScore)/4
         setOverallScore(overAll)
@@ -204,4 +211,25 @@ class DrivingActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
     }
+
+//   fun colorInterpolation(percent:Int): Int {
+//       val startColor = ContextCompat.getColor(this, R.color.red)
+//       val endColor = ContextCompat.getColor(this, R.color.green_200)
+//       val midColor = Color.rgb(255, 255, 102)
+
+//       return when{
+//           percent < 50 -> ColorUtils.blendARGB(startColor, midColor, percent/50f)
+//           else -> ColorUtils.blendARGB(midColor, endColor, (percent-50)/50f)
+//       }
+//   }
+
+    fun colorInterpolation(percent:Int): Int {
+        val h = (percent/100f) * 0.34f * 360 // Hue (note 0.4 = Green, see huge chart below)
+        val s = 0.35f // Saturation
+        val b = 0.85f // Brightness
+
+        return Color.HSVToColor(floatArrayOf(h,s,b))
+    }
+
+
 }

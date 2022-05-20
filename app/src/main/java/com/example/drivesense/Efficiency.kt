@@ -15,8 +15,16 @@ class Efficiency() {
     private val steering = EventData(binSize, "steering")
     private val acceleration = EventData(binSize, "acceleration")
 
-
-
+    class Thresholds {
+        companion object {
+            val breakingNormal = 0.25f
+            val breakingAggressive = 0.45f
+            val steeringNormal = 0.25f
+            val steeringAggressive = 0.45f
+            val accelerationNormal = 0.35f
+            val accelerationAggressive = 0.55f
+        }
+    }
 
     fun add(x:FloatArray, y:FloatArray, z:FloatArray, classification:Int){
         // if event 0-breaking, 1-steering, 2-acceleration, 3-null
@@ -64,14 +72,14 @@ class Efficiency() {
     }
 
     fun getScoreBreaking(): Int {
-        return getPercentages(breaking.percentile(90), normal, aggressive)
+        return getPercentages(breaking.percentile(90), Thresholds.breakingNormal, Thresholds.breakingAggressive)
     }
     fun getScoreSteering(): Int {
-        return getPercentages(steering.percentile(90), normal, aggressive)
+        return getPercentages(steering.percentile(90), Thresholds.steeringNormal, Thresholds.steeringAggressive)
     }
 
     fun getScoreAcceleration(): Int {
-        return getPercentages(acceleration.percentile(90), normal, aggressive)
+        return getPercentages(acceleration.percentile(90), Thresholds.accelerationNormal, Thresholds.accelerationAggressive)
     }
 
     private fun getPercentages(percentile:Float, lowerBound:Float, upperBound:Float):Int{
@@ -90,14 +98,14 @@ class Efficiency() {
 
     // new scoring approach
     fun getNewScoreBreaking(): Int {
-        return getNewPercentages(breaking.getListOfPeaks(), normal, aggressive)
+        return getNewPercentages(breaking.getListOfPeaks(), Thresholds.breakingNormal, Thresholds.breakingAggressive)
     }
     fun getNewScoreSteering(): Int {
-        return getNewPercentages(steering.getListOfPeaks(), normal, aggressive)
+        return getNewPercentages(steering.getListOfPeaks(), Thresholds.steeringNormal, Thresholds.steeringAggressive)
     }
 
     fun getNewScoreAcceleration(): Int {
-        return getNewPercentages(acceleration.getListOfPeaks(), normal, aggressive)
+        return getNewPercentages(acceleration.getListOfPeaks(), Thresholds.accelerationNormal, Thresholds.accelerationAggressive)
     }
 
     private fun getNewPercentages(peaks:MutableList<Int>, lowerBound:Float, upperBound:Float):Int{
