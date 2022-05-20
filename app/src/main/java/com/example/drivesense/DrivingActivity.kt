@@ -1,5 +1,7 @@
 package com.example.drivesense
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -26,6 +28,8 @@ class DrivingActivity : AppCompatActivity() {
     var accelerationScore: Int = 0
     var steeringScore: Int = 0
     var speedingScore: Int = 0
+    var startTime: Long = 0
+    var elapsedTime: Long = 0
 
     lateinit var mainHandler: Handler
     var counts = intArrayOf(0,0,0,0)
@@ -150,6 +154,7 @@ class DrivingActivity : AppCompatActivity() {
                 startScoring()
             } else {
                 stopScoring()
+                showSummary()
             }
         }
 
@@ -164,6 +169,7 @@ class DrivingActivity : AppCompatActivity() {
         mainHandler.post(updateScoresTask)
         speeding.startLocationUpdates(this)
         setStartButton()
+        startTime = System.currentTimeMillis()
     }
 
     fun stopScoring() {
@@ -175,6 +181,7 @@ class DrivingActivity : AppCompatActivity() {
         mainHandler.removeCallbacks(updateScoresTask)
         speeding.stopLocationUpdates()
         setStartButton()
+        elapsedTime = System.currentTimeMillis()-startTime
     }
 
     fun setStartButton() {
@@ -198,6 +205,43 @@ class DrivingActivity : AppCompatActivity() {
         accelerationScore = 0
         steeringScore = 0
         speedingScore = 0
+    }
+
+    fun showSummary() {
+        val minutes = elapsedTime / 1000 / 60
+        val seconds = elapsedTime / 1000 % 60
+        val overallScore = (breakingScore+accelerationScore+steeringScore+speedingScore)/4
+
+        // build alert dialog
+        val dialogBuilder = AlertDialog.Builder(this)
+
+        val summary =
+            "Acceleration score: $accelerationScore\n"+
+            "Breaking score: $breakingScore\n"+
+            "Steering score: $steeringScore\n"+
+            "Speeding score: $speedingScore\n"+
+            "Overall score: $overallScore\n"+
+            "Elapsed time: $minutes min $seconds sec"
+
+        // set message of alert dialog
+        dialogBuilder.setMessage(summary)
+            // if the dialog is cancelable
+            .setCancelable(false)
+            // positive button text and action
+//            .setPositiveButton("Proceed", DialogInterface.OnClickListener {
+//                    dialog, id -> finish()
+//            })
+            // negative button text and action
+            .setNegativeButton("Close", DialogInterface.OnClickListener {
+                    dialog, id -> dialog.cancel()
+            })
+
+        // create dialog box
+        val alert = dialogBuilder.create()
+        // set title for alert dialog box
+        alert.setTitle("Summary")
+        // show alert dialog
+        alert.show()
     }
 
     override fun onPause() {
