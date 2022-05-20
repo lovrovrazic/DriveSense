@@ -167,6 +167,7 @@ class DrivingActivity : AppCompatActivity() {
     }
 
     fun stopScoring() {
+        resetScores()
         recording = false
         machine_learning.closeModel()
         Aware.stopLinearAccelerometer(this)
@@ -193,7 +194,10 @@ class DrivingActivity : AppCompatActivity() {
     }
 
     fun resetScores() {
-        binding.speedScoreTextView.text = "0"
+        breakingScore = 0
+        accelerationScore = 0
+        steeringScore = 0
+        speedingScore = 0
     }
 
     override fun onPause() {
