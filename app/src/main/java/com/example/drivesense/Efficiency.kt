@@ -7,8 +7,6 @@ import kotlin.math.sqrt
 
 class Efficiency() {
     // thresholds
-    private val normal = 0.15f
-    private val aggressive = 0.5f
     private val binSize = 0.025f
 
     private val breaking = EventData(binSize, "breaking")
@@ -17,12 +15,12 @@ class Efficiency() {
 
     class Thresholds {
         companion object {
-            val breakingNormal = 0.25f
-            val breakingAggressive = 0.45f
-            val steeringNormal = 0.25f
-            val steeringAggressive = 0.45f
-            val accelerationNormal = 0.35f
-            val accelerationAggressive = 0.55f
+            const val breakingNormal = 0.25f
+            const val breakingAggressive = 0.45f
+            const val steeringNormal = 0.25f
+            const val steeringAggressive = 0.45f
+            const val accelerationNormal = 0.35f
+            const val accelerationAggressive = 0.55f
         }
     }
 
