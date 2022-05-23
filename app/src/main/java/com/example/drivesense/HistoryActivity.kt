@@ -2,6 +2,8 @@ package com.example.drivesense
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +34,22 @@ class HistoryActivity : AppCompatActivity() {
 
         historyViewModel.allRecords.observe(this) { records ->
             records.let { adapter.submitList(it) }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.history_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.clear_history -> {
+                historyViewModel.deleteAllRecords()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }

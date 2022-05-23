@@ -11,4 +11,10 @@ class HistoryRepository(private val historyDao: HistoryDao) {
     suspend fun insert(record: Record) {
         historyDao.insert(record)
     }
+
+    @Suppress("RedundantModifier")
+    @WorkerThread
+    suspend fun deleteAllRecords() {
+        historyDao.deleteAllRecords()
+    }
 }

@@ -10,6 +10,10 @@ class HistoryViewModel(private val repository: HistoryRepository) : ViewModel() 
     fun insert(record: Record) = viewModelScope.launch {
         repository.insert(record)
     }
+
+    fun deleteAllRecords() = viewModelScope.launch {
+        repository.deleteAllRecords()
+    }
 }
 
 class HistoryViewModelFactory(private val repository: HistoryRepository) : ViewModelProvider.Factory {
