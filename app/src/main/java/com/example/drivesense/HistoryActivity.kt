@@ -2,10 +2,16 @@ package com.example.drivesense
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Html
-import android.widget.TextView
+import androidx.activity.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class HistoryActivity : AppCompatActivity() {
+
+    private val historyViewModel: HistoryViewModel by viewModels {
+        HistoryViewModelFactory((application as MainApplication).repository)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
@@ -19,6 +25,13 @@ class HistoryActivity : AppCompatActivity() {
             actionBar.setDisplayHomeAsUpEnabled(true)
         }
 
+        val recyclerView = findViewById<RecyclerView>(R.id.history_recyclerview)
+        val adapter = HistoryListAdapter()
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
+        historyViewModel.allRecords.observe(this) { records ->
+            records.let { adapter.submitList(it) }
+        }
     }
 }

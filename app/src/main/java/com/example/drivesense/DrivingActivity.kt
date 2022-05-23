@@ -12,13 +12,12 @@ import android.util.Log
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import com.aware.Aware
 import com.aware.Aware_Preferences
 import com.aware.LinearAccelerometer
 import com.aware.providers.Linear_Accelerometer_Provider
 import com.example.drivesense.databinding.ActivityDrivingBinding
+import androidx.activity.viewModels
 
 private lateinit var binding: ActivityDrivingBinding
 
@@ -36,6 +35,10 @@ class DrivingActivity : AppCompatActivity() {
 
     lateinit var mainHandler: Handler
     var counts = intArrayOf(0,0,0,0)
+
+    private val historyViewModel: HistoryViewModel by viewModels {
+        HistoryViewModelFactory((application as MainApplication).repository)
+    }
 
     private val updateTextTask = object : Runnable {
         override fun run() {
@@ -162,6 +165,7 @@ class DrivingActivity : AppCompatActivity() {
             } else {
                 stopScoring()
                 showSummary()
+                saveRecord()
             }
         }
 
@@ -180,6 +184,8 @@ class DrivingActivity : AppCompatActivity() {
     }
 
     fun stopScoring() {
+        if (!recording)
+            return
         resetScores()
         recording = false
         machine_learning.closeModel()
@@ -239,6 +245,21 @@ class DrivingActivity : AppCompatActivity() {
         val alert = dialogBuilder.create()
         alert.setTitle("Summary")
         alert.show()
+    }
+
+    fun saveRecord() {
+        val record: Record = Record(
+            0,
+            accelerationScore,
+            breakingScore,
+            steeringScore,
+            speedingScore,
+            (breakingScore+accelerationScore+steeringScore+speedingScore)/4,
+            elapsedTime,
+            System.currentTimeMillis()
+        )
+
+        historyViewModel.insert(record)
     }
 
     override fun onPause() {
