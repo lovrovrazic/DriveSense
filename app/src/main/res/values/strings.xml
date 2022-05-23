@@ -42,4 +42,10 @@
         <br>• Avoid idling
         ]]>
     </string>
+    <string name="acceleration_score">Acceleration score:</string>
+    <string name="breaking_score">Breaking score:</string>
+    <string name="steering_score">Steering score:</string>
+    <string name="speeding_score">Speeding score:</string>
+    <string name="elapsed_time">Elapsed time:</string>
+    <string name="overall_score">Overall score:</string>
 </resources>

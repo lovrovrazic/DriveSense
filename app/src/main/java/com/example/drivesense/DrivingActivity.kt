@@ -226,12 +226,12 @@ class DrivingActivity : AppCompatActivity() {
         val overallScore = (breakingScore+accelerationScore+steeringScore+speedingScore)/4
         val dialogBuilder = AlertDialog.Builder(this)
         val summary =
-            "Acceleration score: $accelerationScore\n"+
-            "Breaking score: $breakingScore\n"+
-            "Steering score: $steeringScore\n"+
-            "Speeding score: $speedingScore\n"+
-            "Overall score: $overallScore\n"+
-            "Elapsed time: $minutes min $seconds sec"
+            "${getString(R.string.acceleration_score)} $accelerationScore\n"+
+            "${getString(R.string.breaking_score)} $breakingScore\n"+
+            "${getString(R.string.steering_score)} $steeringScore\n"+
+            "${getString(R.string.speeding_score)} $speedingScore\n"+
+            "${getString(R.string.overall_score)} $overallScore\n"+
+            "${getString(R.string.elapsed_time)} $minutes min $seconds sec"
 
         dialogBuilder.setMessage(summary)
             .setCancelable(false)
