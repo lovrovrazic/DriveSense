@@ -74,7 +74,7 @@ class Speeding(activity: Activity) {
 
     private fun updateScore(location: Location, maxSpeed: Int) {
         val speed = location.speed*3.6f //kmph
-        if (speed > DETECTION_THRESHOLD) {
+        if (speed > DETECTION_THRESHOLD  && maxSpeed > 0) {
             ++validReadings
             if (speed > maxSpeed+SPEEDING_TOLERANCE) {
                 ++speedingReadings
