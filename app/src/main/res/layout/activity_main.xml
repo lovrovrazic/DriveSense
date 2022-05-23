@@ -41,6 +41,21 @@
         app:layout_constraintTop_toBottomOf="@+id/title_textView" />
 
     <Button
+        android:id="@+id/history_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:alpha="80"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
+        android:text="@string/history_button"
+        android:textSize="18sp"
+        app:cornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/getscore_button" />
+
+    <Button
         android:id="@+id/tips_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -53,36 +68,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/getscore_button" />
-
-    <Button
-        android:id="@+id/sensors_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:alpha="80"
-        android:paddingTop="24dp"
-        android:paddingBottom="24dp"
-        android:text="@string/sensors_button"
-        android:textSize="18sp"
-        app:cornerRadius="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tips_button" />
-
-    <Button
-        android:id="@+id/gps_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:alpha="80"
-        android:paddingTop="24dp"
-        android:paddingBottom="24dp"
-        android:text="@string/gps_button"
-        android:textSize="18sp"
-        app:cornerRadius="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sensors_button" />
+        app:layout_constraintTop_toBottomOf="@id/history_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

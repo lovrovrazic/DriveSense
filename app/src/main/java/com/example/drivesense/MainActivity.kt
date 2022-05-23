@@ -16,6 +16,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent)
         }
 
+        val historyBtn = findViewById<Button>(R.id.history_button)
+        historyBtn.setOnClickListener{
+            val Intent = Intent(this, HistoryActivity::class.java)
+            startActivity(Intent)
+        }
+
         val tipsBtn = findViewById<Button>(R.id.tips_button)
         tipsBtn.setOnClickListener{
             val Intent = Intent(this, TipsActivity::class.java)

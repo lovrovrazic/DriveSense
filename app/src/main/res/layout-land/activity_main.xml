@@ -53,16 +53,16 @@
             app:cornerRadius="0dp" />
 
         <Button
-            android:id="@+id/sensors_button"
+            android:id="@+id/history_button"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_marginLeft="2.5dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="2.5dp"
             android:layout_weight="1"
             android:alpha="80"
             android:paddingTop="24dp"
             android:paddingBottom="24dp"
-            android:text="@string/sensors_button"
+            android:text="@string/history_button"
             android:textSize="18sp"
             app:cornerRadius="0dp" />
 
@@ -80,19 +80,6 @@
             android:textSize="18sp"
             app:cornerRadius="0dp" />
 
-        <Button
-            android:id="@+id/gps_button"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginLeft="2.5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:alpha="80"
-            android:paddingTop="24dp"
-            android:paddingBottom="24dp"
-            android:text="@string/gps_button"
-            android:textSize="18sp"
-            app:cornerRadius="0dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
