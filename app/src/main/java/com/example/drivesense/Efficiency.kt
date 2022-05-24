@@ -24,48 +24,51 @@ class Efficiency() {
         }
     }
 
-    fun add(x:FloatArray, y:FloatArray, z:FloatArray, classification:Int){
+    fun add(x:FloatArray, y:FloatArray, z:FloatArray, classification:Int):Int{
         // if event 0-breaking, 1-steering, 2-acceleration, 3-null
+        var newEvent:Int = 3
         when (classification) {
             // breaking
             0 -> {
                 //Log.d("efficiency:","breaking")
                 // add data
                 breaking.addData(x,y,z)
-                // update magnitudes of old events
-                steering.updateMag()
-                acceleration.updateMag()
+                // update old events
+                if (steering.updateEvent()) newEvent = 1
+                if (acceleration.updateEvent()) newEvent = 2
             }
             // steering
             1 -> {
                 //Log.d("efficiency:","steering")
                 // add data
                 steering.addData(x,y,z)
-                // update magnitudes of old events
-                breaking.updateMag()
-                acceleration.updateMag()
+                // update old events
+                if (breaking.updateEvent()) newEvent = 0
+                if (acceleration.updateEvent()) newEvent = 2
             }
             // acceleration
             2 -> {
                 //Log.d("efficiency:","acceleration")
                 // add data
                 acceleration.addData(x,y,z)
-                // update magnitudes of old events
-                breaking.updateMag()
-                steering.updateMag()
+                //  update old events
+                if (breaking.updateEvent()) newEvent = 0
+                if (steering.updateEvent()) newEvent = 1
             }
             // null
             3 -> {
                 //Log.d("efficiency:","null")
-                // update magnitudes of old events
-                acceleration.updateMag()
-                breaking.updateMag()
-                steering.updateMag()
+                // update old events
+                if (breaking.updateEvent()) newEvent = 0
+                if (steering.updateEvent()) newEvent = 1
+                if (acceleration.updateEvent()) newEvent = 2
             }
             else -> { // default
                 Log.d("efficiency:","classification not found")
             }
         }
+
+        return newEvent
 
     }
 
@@ -127,5 +130,16 @@ class Efficiency() {
         return (peaksScores / numberOfEvents)
     }
 
+    fun getNumberOfEventsBreaking():Int{
+        return breaking.getNumberOfEvents()
+    }
+
+    fun getNumberOfEventsSteering():Int{
+        return steering.getNumberOfEvents()
+    }
+
+    fun getNumberOfEventsAcceleration():Int{
+        return acceleration.getNumberOfEvents()
+    }
 
 }

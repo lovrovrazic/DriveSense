@@ -121,10 +121,10 @@ class Model(var orientation:Boolean) {
         // close model
         //closeModel()
 
-        efficiency.add(x_sample,y_sample,z_sample, classification)
+        val updatedEvent = efficiency.add(x_sample,y_sample,z_sample, classification)
 
 
-        return classification
+        return updatedEvent
     }
 
     fun getScoreBreaking(): Int {
@@ -136,5 +136,19 @@ class Model(var orientation:Boolean) {
 
     fun getScoreAcceleration(): Int {
         return efficiency.getNewScoreAcceleration()
+    }
+
+
+    // number of events
+    fun getNumberOfEventsBreaking():Int{
+        return efficiency.getNumberOfEventsBreaking()
+    }
+
+    fun getNumberOfEventsSteering():Int{
+        return efficiency.getNumberOfEventsSteering()
+    }
+
+    fun getNumberOfEventsAcceleration():Int{
+        return efficiency.getNumberOfEventsAcceleration()
     }
 }

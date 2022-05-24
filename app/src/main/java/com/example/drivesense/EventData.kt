@@ -76,7 +76,7 @@ class EventData(binSize:Float, eventName:String) {
     }
 
     // if old event still active add last magnitude peak to list
-    fun updateMag(){
+    fun updateEvent(): Boolean {
         if (oldEvent){
             //peaks.add(lastMagPeak)
             addPeak(lastPeak)
@@ -85,7 +85,10 @@ class EventData(binSize:Float, eventName:String) {
             // set magnitude to 0
             lastPeak = 0f
             Log.d("peaks", peaks.map { it.toString() }.toTypedArray().contentToString())
+
+            return true
         }
+        return false
     }
 
     // calculates percentile
@@ -139,6 +142,10 @@ class EventData(binSize:Float, eventName:String) {
     // get peaks
     fun getListOfPeaks(): MutableList<Int> {
         return peaks
+    }
+
+    fun getNumberOfEvents():Int{
+        return numberOfEvents
     }
 
 
