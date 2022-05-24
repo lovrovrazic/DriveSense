@@ -292,7 +292,6 @@ class DrivingActivity : AppCompatActivity() {
             elapsedTime,
             System.currentTimeMillis()
         )
-
         historyViewModel.insert(record)
     }
 
