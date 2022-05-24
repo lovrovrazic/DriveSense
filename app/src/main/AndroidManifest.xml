@@ -23,7 +23,7 @@
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".TipsActivity"
+            android:name=".InstructionsActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity

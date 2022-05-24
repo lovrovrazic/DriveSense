@@ -73,7 +73,7 @@
         android:backgroundTint="@color/gray"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:text="@string/tips_button"
+        android:text="@string/instructions_button"
         android:textSize="14sp"
         app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"

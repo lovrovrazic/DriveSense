@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">driveSense</string>
     <string name="get_score_button">Get safety score</string>
-    <string name="tips_button">Eco-driving tips</string>
-    <string name="tips_activity">Eco-driving tips</string>
+    <string name="instructions_button">Instructions</string>
+    <string name="instructions_activity">Instructions</string>
     <string name="history_button">History</string>
     <string name="history_activity">History</string>
     <string name="sensors_activity">Sensors</string>
@@ -22,24 +22,18 @@
     <string name="detected_acceleration_title">Detected acceleration:</string>
     <string name="detected_lane_title">Detected lane change:</string>
     <string name="detected_breaking_title">Detected breaking:</string>
-    <string name="tips_text">
+    <string name="instructions_text">
         <![CDATA[
-        <h2>What is eco-driving?</h2><br>
-        Eco-driving is a method of driving a vehicle with the goal of using less fuel and having less of an impact on the environment.
+        The goal of this app is to give you feedback on your driving behaviour. The score is lower if you drive aggressively or more dangerously, and higher if you drive calmly or in a safer manner.
         <br><br>
-        <h2>What can be achieved by eco-driving?</h2><br>
-        Benefits of eco-driving as cited by the U.S. Forest Service:
-        <br>• Lower fuel use and costs
-        <br>• Reduce emissions, including CO2
-        <br>• Reduce vehicle wear
-        <br>• Increase safety
+        <h2>Some safe driving techniques</h2>
+        <br>• Break and accelerate gradually
+        <br>• Don’t slam on the brakes, except when necessary
+        <br>• Regulate your speed based on driving conditions and speed limits
+        <br>• Adjust your seat position properly
+        <br>• Hold your steering wheel at 9 and 3 positions
         <br><br>
-        <h2>Eco-driving techniques</h2>
-        <br>• Don’t slam on the brakes
-        <br>• Regulate your speed
-        <br>• Reduce excess weight
-        <br>• Optimize routing
-        <br>• Avoid idling
+        In order for app to be able to measure the needed data from accelerometer your device needs to be positioned in vehicle as pictured below.
         ]]>
     </string>
     <string name="acceleration_score">Acceleration score:</string>

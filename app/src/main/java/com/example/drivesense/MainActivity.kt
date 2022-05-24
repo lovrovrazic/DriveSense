@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
         val tipsBtn = findViewById<Button>(R.id.tips_button)
         tipsBtn.setOnClickListener{
-            val Intent = Intent(this, TipsActivity::class.java)
+            val Intent = Intent(this, InstructionsActivity::class.java)
             startActivity(Intent)
         }
     }
