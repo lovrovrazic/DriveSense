@@ -19,6 +19,7 @@ import com.aware.LinearAccelerometer
 import com.aware.providers.Linear_Accelerometer_Provider
 import com.example.drivesense.databinding.ActivityDrivingBinding
 import androidx.activity.viewModels
+import kotlin.math.roundToInt
 
 private lateinit var binding: ActivityDrivingBinding
 
@@ -31,6 +32,7 @@ class DrivingActivity : AppCompatActivity() {
     var accelerationScore: Int = 0
     var steeringScore: Int = 0
     var speedingScore: Int = 0
+    var overAllScore: Int = 0
     var startTime: Long = 0
     var elapsedTime: Long = 0
 
@@ -62,6 +64,10 @@ class DrivingActivity : AppCompatActivity() {
             // classify: 0-breaking, 1-steering, 2-acceleration, 3-null
             val classification = machine_learning.model_classification(this)
             counts[classification]++
+
+            if (classification != 3){
+                updateScores()
+            }
             // print counts
             Log.d("counts", counts.map { it.toString() }.toTypedArray().contentToString())
         }
@@ -199,6 +205,18 @@ class DrivingActivity : AppCompatActivity() {
         accelerationScore = machine_learning.getScoreAcceleration()
         steeringScore = machine_learning.getScoreSteering()
         speedingScore = speeding.getCurrentScore()
+        val allEvents: Float = (machine_learning.getNumberOfEventsBreaking() + machine_learning.getNumberOfEventsSteering() + machine_learning.getNumberOfEventsAcceleration() + speeding.getNumberOfEventsSpeeding()) * 1f
+
+        overAllScore = when(allEvents){
+            0f -> 0
+            else -> {
+                ((machine_learning.getNumberOfEventsBreaking()/allEvents)* breakingScore +
+                (machine_learning.getNumberOfEventsSteering()/allEvents)* steeringScore +
+                (machine_learning.getNumberOfEventsAcceleration()/allEvents)* accelerationScore +
+                (speeding.getNumberOfEventsSpeeding()/allEvents)* speedingScore).roundToInt()
+            }
+        }
+
         showScores()
     }
 
@@ -207,6 +225,7 @@ class DrivingActivity : AppCompatActivity() {
         accelerationScore = 0
         steeringScore = 0
         speedingScore = 0
+        overAllScore = 0
         showScores()
     }
 
@@ -224,21 +243,20 @@ class DrivingActivity : AppCompatActivity() {
         binding.speedScoreTextView.text = "%d".format(speedingScore)
         binding.speedScoreTextView.setTextColor(colorInterpolation(speedingScore))
 
-        val overAll = (breakingScore+accelerationScore+steeringScore+speedingScore)/4
-        setOverallScore(overAll)
+
+        setOverallScore(overAllScore)
     }
 
     fun showSummary() {
         val minutes = elapsedTime / 1000 / 60
         val seconds = elapsedTime / 1000 % 60
-        val overallScore = (breakingScore+accelerationScore+steeringScore+speedingScore)/4
         val dialogBuilder = AlertDialog.Builder(this)
         val summary =
             "${getString(R.string.acceleration_score)} $accelerationScore\n"+
             "${getString(R.string.breaking_score)} $breakingScore\n"+
             "${getString(R.string.steering_score)} $steeringScore\n"+
             "${getString(R.string.speeding_score)} $speedingScore\n"+
-            "${getString(R.string.overall_score)} $overallScore\n"+
+            "${getString(R.string.overall_score)} $overAllScore\n"+
             "${getString(R.string.elapsed_time)} $minutes min $seconds sec"
 
         dialogBuilder.setMessage(summary)

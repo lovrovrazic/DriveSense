@@ -169,6 +169,10 @@ class Speeding(activity: Activity) {
             return networkInfo.isConnected
         }
     }
+
+    fun getNumberOfEventsSpeeding():Int{
+        return validReadings
+    }
 }
 
 class ResponseHandler : ApiResponseReader<String> {
