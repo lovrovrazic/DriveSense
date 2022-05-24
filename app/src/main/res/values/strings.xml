@@ -49,4 +49,5 @@
     <string name="elapsed_time">Elapsed time:</string>
     <string name="overall_score">Overall score:</string>
     <string name="clear_history">Clear history</string>
+    <string name="empty">-</string>
 </resources>
