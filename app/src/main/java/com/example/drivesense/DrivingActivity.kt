@@ -215,7 +215,6 @@ class DrivingActivity : AppCompatActivity() {
                 (speeding.getNumberOfEventsSpeeding()/allEvents)* speedingScore).roundToInt()
             }
         }
-
         showScores()
     }
 
@@ -229,20 +228,17 @@ class DrivingActivity : AppCompatActivity() {
     }
 
     fun scoreFormat (textview: TextView, score: Int, numOfEvents: Int){
-
         when(numOfEvents){
             0 -> {
                 textview.text = getString(R.string.empty)
                 val color =  binding.scoreTextView.getCurrentTextColor()
                 textview.setTextColor(color)
-
             }
             else -> {
                 textview.text = "$score"
                 textview.setTextColor(colorInterpolation(score))
             }
         }
-
     }
 
     fun showScores() {
@@ -308,17 +304,6 @@ class DrivingActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
     }
-
-//   fun colorInterpolation(percent:Int): Int {
-//       val startColor = ContextCompat.getColor(this, R.color.red)
-//       val endColor = ContextCompat.getColor(this, R.color.green_200)
-//       val midColor = Color.rgb(255, 255, 102)
-
-//       return when{
-//           percent < 50 -> ColorUtils.blendARGB(startColor, midColor, percent/50f)
-//           else -> ColorUtils.blendARGB(midColor, endColor, (percent-50)/50f)
-//       }
-//   }
 
     fun colorInterpolation(percent:Int): Int {
         val h = (percent/100f) * 0.3f * 360 // Hue (note 0.4 = Green, see huge chart below)
