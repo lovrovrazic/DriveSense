@@ -13,6 +13,7 @@ import android.util.TypedValue
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import com.aware.Aware
 import com.aware.Aware_Preferences
 import com.aware.LinearAccelerometer
@@ -227,19 +228,34 @@ class DrivingActivity : AppCompatActivity() {
         showScores()
     }
 
+    fun scoreFormat (textview: TextView, score: Int, numOfEvents: Int){
+
+        when(numOfEvents){
+            0 -> {
+                textview.text = getString(R.string.empty)
+                val color =  binding.scoreTextView.getCurrentTextColor()
+                textview.setTextColor(color)
+
+            }
+            else -> {
+                textview.text = "$score"
+                textview.setTextColor(colorInterpolation(score))
+            }
+        }
+
+    }
+
     fun showScores() {
         // update breaking, steering, acceleration scores
         Log.d("breaking score", "%d".format(breakingScore))
         Log.d("steering score", "%d".format(steeringScore))
         Log.d("acceleration score", "%d".format(accelerationScore))
-        binding.breakingScoreTextView.text = "%d".format(breakingScore)
-        binding.breakingScoreTextView.setTextColor(colorInterpolation(breakingScore))
-        binding.steeringScoreTextView.text = "%d".format(steeringScore)
-        binding.steeringScoreTextView.setTextColor(colorInterpolation(steeringScore))
-        binding.accelerationScoreTextView.text = "%d".format(accelerationScore)
-        binding.accelerationScoreTextView.setTextColor(colorInterpolation(accelerationScore))
-        binding.speedScoreTextView.text = "%d".format(speedingScore)
-        binding.speedScoreTextView.setTextColor(colorInterpolation(speedingScore))
+
+        scoreFormat(binding.breakingScoreTextView, breakingScore, machine_learning.getNumberOfEventsBreaking())
+        scoreFormat(binding.steeringScoreTextView, steeringScore, machine_learning.getNumberOfEventsSteering())
+        scoreFormat(binding.accelerationScoreTextView, accelerationScore, machine_learning.getNumberOfEventsAcceleration())
+        scoreFormat(binding.speedScoreTextView, speedingScore, speeding.getNumberOfEventsSpeeding())
+
         setOverallScore(overAllScore)
     }
 
