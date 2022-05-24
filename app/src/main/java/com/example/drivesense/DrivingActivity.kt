@@ -71,29 +71,6 @@ class DrivingActivity : AppCompatActivity() {
         //binding.speedScoreTextView.text = "%d".format(counts[3])
     }
 
-    fun updateScores() {
-        breakingScore = machine_learning.getScoreBreaking()
-        accelerationScore = machine_learning.getScoreAcceleration()
-        steeringScore = machine_learning.getScoreSteering()
-        speedingScore = speeding.getCurrentScore()
-
-        // update breaking, steering, acceleration scores
-        Log.d("breaking score", "%d".format(breakingScore))
-        Log.d("steering score", "%d".format(steeringScore))
-        Log.d("acceleration score", "%d".format(accelerationScore))
-        binding.breakingScoreTextView.text = "%d".format(breakingScore)
-        binding.breakingScoreTextView.setTextColor(colorInterpolation(breakingScore))
-        binding.steeringScoreTextView.text = "%d".format(steeringScore)
-        binding.steeringScoreTextView.setTextColor(colorInterpolation(steeringScore))
-        binding.accelerationScoreTextView.text = "%d".format(accelerationScore)
-        binding.accelerationScoreTextView.setTextColor(colorInterpolation(accelerationScore))
-        binding.speedScoreTextView.text = "%d".format(speedingScore)
-        binding.speedScoreTextView.setTextColor(colorInterpolation(speedingScore))
-
-        val overAll = (breakingScore+accelerationScore+steeringScore+speedingScore)/4
-        setOverallScore(overAll)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -167,6 +144,7 @@ class DrivingActivity : AppCompatActivity() {
                 stopScoring()
                 showSummary()
                 saveRecord()
+                resetScores()
             }
         }
 
@@ -187,7 +165,6 @@ class DrivingActivity : AppCompatActivity() {
     fun stopScoring() {
         if (!recording)
             return
-        resetScores()
         recording = false
         machine_learning.closeModel()
         Aware.stopLinearAccelerometer(this)
@@ -217,11 +194,38 @@ class DrivingActivity : AppCompatActivity() {
         binding.scoreTextView.text = "%d".format(score)
     }
 
+    fun updateScores() {
+        breakingScore = machine_learning.getScoreBreaking()
+        accelerationScore = machine_learning.getScoreAcceleration()
+        steeringScore = machine_learning.getScoreSteering()
+        speedingScore = speeding.getCurrentScore()
+        showScores()
+    }
+
     fun resetScores() {
         breakingScore = 0
         accelerationScore = 0
         steeringScore = 0
         speedingScore = 0
+        showScores()
+    }
+
+    fun showScores() {
+        // update breaking, steering, acceleration scores
+        Log.d("breaking score", "%d".format(breakingScore))
+        Log.d("steering score", "%d".format(steeringScore))
+        Log.d("acceleration score", "%d".format(accelerationScore))
+        binding.breakingScoreTextView.text = "%d".format(breakingScore)
+        binding.breakingScoreTextView.setTextColor(colorInterpolation(breakingScore))
+        binding.steeringScoreTextView.text = "%d".format(steeringScore)
+        binding.steeringScoreTextView.setTextColor(colorInterpolation(steeringScore))
+        binding.accelerationScoreTextView.text = "%d".format(accelerationScore)
+        binding.accelerationScoreTextView.setTextColor(colorInterpolation(accelerationScore))
+        binding.speedScoreTextView.text = "%d".format(speedingScore)
+        binding.speedScoreTextView.setTextColor(colorInterpolation(speedingScore))
+
+        val overAll = (breakingScore+accelerationScore+steeringScore+speedingScore)/4
+        setOverallScore(overAll)
     }
 
     fun showSummary() {
