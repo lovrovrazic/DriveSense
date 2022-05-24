@@ -242,8 +242,6 @@ class DrivingActivity : AppCompatActivity() {
         binding.accelerationScoreTextView.setTextColor(colorInterpolation(accelerationScore))
         binding.speedScoreTextView.text = "%d".format(speedingScore)
         binding.speedScoreTextView.setTextColor(colorInterpolation(speedingScore))
-
-
         setOverallScore(overAllScore)
     }
 
@@ -280,7 +278,7 @@ class DrivingActivity : AppCompatActivity() {
             breakingScore,
             steeringScore,
             speedingScore,
-            (breakingScore+accelerationScore+steeringScore+speedingScore)/4,
+            overAllScore,
             elapsedTime,
             System.currentTimeMillis()
         )
