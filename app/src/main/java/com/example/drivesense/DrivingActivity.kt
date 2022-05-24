@@ -71,10 +71,6 @@ class DrivingActivity : AppCompatActivity() {
             // print counts
             Log.d("counts", counts.map { it.toString() }.toTypedArray().contentToString())
         }
-        //binding.breakingScoreTextView.text = "%d".format(counts[0])
-        //binding.steeringScoreTextView.text = "%d".format(counts[1])
-        //binding.accelerationScoreTextView.text = "%d".format(counts[2])
-        //binding.speedScoreTextView.text = "%d".format(counts[3])
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -179,6 +175,8 @@ class DrivingActivity : AppCompatActivity() {
         speeding.stopLocationUpdates()
         setStartButton()
         elapsedTime = System.currentTimeMillis()-startTime
+        speeding = Speeding(this)
+        machine_learning = Model(isHorizontal())
     }
 
     fun setStartButton() {
