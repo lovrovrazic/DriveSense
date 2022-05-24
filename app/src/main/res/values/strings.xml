@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">driveSense</string>
-    <string name="get_score_button">Get eco-score</string>
+    <string name="get_score_button">Get safety score</string>
     <string name="tips_button">Eco-driving tips</string>
     <string name="tips_activity">Eco-driving tips</string>
     <string name="history_button">History</string>
     <string name="history_activity">History</string>
     <string name="sensors_activity">Sensors</string>
-    <string name="getscore_activity">Eco-score</string>
+    <string name="getscore_activity">Safety score</string>
     <string name="gauge_image">Gauge</string>
     <string name="needle_image">Needle</string>
     <string name="gauge_value">00</string>

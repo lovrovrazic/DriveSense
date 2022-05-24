@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.util.TypedValue
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
@@ -204,7 +205,10 @@ class DrivingActivity : AppCompatActivity() {
             startBtn.setBackgroundColor(getColor(R.color.red))
         } else {
             startBtn.text = getString(R.string.start_button)
-            startBtn.setBackgroundColor(getColor(R.color.green_200))
+            val typedValue = TypedValue()
+            theme.resolveAttribute(androidx.appcompat.R.attr.colorPrimary, typedValue, true)
+            val color = typedValue.data
+            startBtn.setBackgroundColor(color)
         }
     }
 
