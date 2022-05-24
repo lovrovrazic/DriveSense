@@ -85,7 +85,8 @@
                         android:layout_weight=".5"
                         android:gravity="bottom"
                         android:text="Acceleration"
-                        android:textAlignment="center" />
+                        android:textAlignment="center"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/accelerationScore_textView"
@@ -94,7 +95,8 @@
                         android:layout_weight=".5"
                         android:text="00"
                         android:textAlignment="center"
-                        android:textSize="24dp" />
+                        android:textSize="28dp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -110,7 +112,8 @@
                         android:layout_weight=".5"
                         android:gravity="bottom"
                         android:text="Breaking"
-                        android:textAlignment="center" />
+                        android:textAlignment="center"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/breakingScore_textView"
@@ -119,7 +122,8 @@
                         android:layout_weight=".5"
                         android:text="00"
                         android:textAlignment="center"
-                        android:textSize="24dp" />
+                        android:textSize="28dp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -143,7 +147,8 @@
                         android:layout_weight=".5"
                         android:gravity="bottom|center_vertical"
                         android:text="Steering"
-                        android:textAlignment="center" />
+                        android:textAlignment="center"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/steeringScore_textView"
@@ -152,7 +157,8 @@
                         android:layout_weight=".5"
                         android:text="00"
                         android:textAlignment="center"
-                        android:textSize="24dp" />
+                        android:textSize="28dp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -168,7 +174,8 @@
                         android:layout_weight=".5"
                         android:gravity="bottom|center_vertical"
                         android:text="Speed"
-                        android:textAlignment="center" />
+                        android:textAlignment="center"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/speedScore_textView"
@@ -177,7 +184,8 @@
                         android:layout_weight=".5"
                         android:text="00"
                         android:textAlignment="center"
-                        android:textSize="24dp" />
+                        android:textSize="28dp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
             </LinearLayout>
