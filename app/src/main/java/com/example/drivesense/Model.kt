@@ -2,7 +2,8 @@ package com.example.drivesense
 
 import android.content.Context
 import android.util.Log
-import com.example.drivesense.ml.Behaviour
+//import com.example.drivesense.ml.Behaviour
+import com.example.drivesense.ml.BehaviourModel
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 
@@ -19,7 +20,7 @@ class Model(var orientation:Boolean) {
 
     private var horizontalOrientation = orientation
 
-    private lateinit var model: Behaviour
+    private lateinit var model: BehaviourModel
 
     private val g = 9.80665
 
@@ -62,7 +63,8 @@ class Model(var orientation:Boolean) {
     }
 
     fun startModel(contex:Context) {
-        model = Behaviour.newInstance(contex)
+        //model = Behaviour.newInstance(contex)
+        model = BehaviourModel.newInstance(contex)
     }
 
     fun closeModel(){
@@ -106,7 +108,8 @@ class Model(var orientation:Boolean) {
 
 
         // reshape and prepare data for classification
-        val inputFeature0 = TensorBuffer.createFixedSize( intArrayOf(1,20,3,1), DataType.FLOAT32 )
+        //val inputFeature0 = TensorBuffer.createFixedSize( intArrayOf(1,20,3,1), DataType.FLOAT32 )
+        val inputFeature0 = TensorBuffer.createFixedSize( intArrayOf(1,20,3), DataType.FLOAT32 )
         inputFeature0.loadArray(data)
 
         // run model inference and gets result.
