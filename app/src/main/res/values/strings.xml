@@ -5,29 +5,18 @@
     <string name="instructions_activity">Instructions</string>
     <string name="history_button">History</string>
     <string name="history_activity">History</string>
-    <string name="sensors_activity">Sensors</string>
     <string name="getscore_activity">Safety score</string>
     <string name="gauge_image">Gauge</string>
     <string name="needle_image">Needle</string>
     <string name="gauge_value">00</string>
     <string name="start_button">Start</string>
     <string name="start_button_active">Stop</string>
-    <string name="acc_title">Accelerometer</string>
-    <string name="acc_x_title">X:</string>
-    <string name="zero_value">0</string>
-    <string name="acc_y_title">Y:</string>
-    <string name="acc_z_title">Z:</string>
-    <string name="sensors_button">Sensors</string>
-    <string name="detected_steering_title">Detected steering:</string>
-    <string name="detected_acceleration_title">Detected acceleration:</string>
-    <string name="detected_lane_title">Detected lane change:</string>
-    <string name="detected_breaking_title">Detected breaking:</string>
     <string name="instructions_text">
         <![CDATA[
         The goal of this app is to give you feedback on your driving behaviour. The score is lower if you drive aggressively or more dangerously, and higher if you drive calmly or in a safer manner.
         <br><br>
         <h2>Some safe driving techniques</h2>
-        <br>• Break and accelerate gradually
+        <br>• Brake and accelerate gradually
         <br>• Don’t slam on the brakes, except when necessary
         <br>• Regulate your speed based on driving conditions and speed limits
         <br>• Adjust your seat position properly
@@ -37,7 +26,7 @@
         ]]>
     </string>
     <string name="acceleration_score">Acceleration score:</string>
-    <string name="breaking_score">Breaking score:</string>
+    <string name="braking_score">Braking score:</string>
     <string name="steering_score">Steering score:</string>
     <string name="speeding_score">Speeding score:</string>
     <string name="elapsed_time">Elapsed time:</string>

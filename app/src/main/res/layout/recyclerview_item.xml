@@ -48,7 +48,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight=".7"
-                android:text="@string/breaking_score" />
+                android:text="@string/braking_score" />
 
             <TextView
                 android:id="@+id/break_sc_textView"

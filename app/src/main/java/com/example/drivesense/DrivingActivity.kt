@@ -261,7 +261,7 @@ class DrivingActivity : AppCompatActivity() {
         val dialogBuilder = AlertDialog.Builder(this)
         val summary =
             "${getString(R.string.acceleration_score)} $accelerationScore\n"+
-            "${getString(R.string.breaking_score)} $breakingScore\n"+
+            "${getString(R.string.braking_score)} $breakingScore\n"+
             "${getString(R.string.steering_score)} $steeringScore\n"+
             "${getString(R.string.speeding_score)} $speedingScore\n"+
             "${getString(R.string.overall_score)} $overAllScore\n"+
