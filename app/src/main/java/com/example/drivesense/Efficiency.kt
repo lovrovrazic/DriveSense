@@ -15,12 +15,12 @@ class Efficiency() {
 
     class Thresholds {
         companion object {
-            const val breakingNormal = 0.2f
+            const val breakingNormal = 0.22f
             const val breakingAggressive = 0.3f
-            const val steeringNormal = 0.25f
-            const val steeringAggressive = 0.4f
+            const val steeringNormal = 0.27f
+            const val steeringAggressive = 0.48f
             const val accelerationNormal = 0.17f
-            const val accelerationAggressive = 0.3f
+            const val accelerationAggressive = 0.27f
         }
     }
 
